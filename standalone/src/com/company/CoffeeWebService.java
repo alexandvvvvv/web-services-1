@@ -7,6 +7,7 @@ import java.util.List;
 
 @WebService(serviceName = "CoffeeService")
 public class CoffeeWebService {
+
     @WebMethod(operationName = "getCoffees")
     public List<Coffee> getCoffees() {
         PostgreSQLDAO dao = new PostgreSQLDAO();

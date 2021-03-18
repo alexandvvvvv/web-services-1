@@ -14,6 +14,8 @@ import java.util.logging.Logger;
 @WebService(serviceName = "CoffeeService")
 public class CoffeeEEWebService {
 
+    public CoffeeEEWebService() {}
+
     @Resource(lookup = "jdbc/ifmo-ws")
     private DataSource dataSource;
 
@@ -23,7 +25,7 @@ public class CoffeeEEWebService {
         return dao.getCoffees();
     }
     @WebMethod(operationName = "getFilteredCoffees")
-    public List<Coffee> getFilteredCoffees(@WebParam(name="filter")CoffeeFilter filter) {
+    public List<Coffee> getFilteredCoffees(@WebParam(name="filter") CoffeeFilter filter) {
         PostgreSQLEEDAO dao = new PostgreSQLEEDAO(getConnection());
         return dao.getFilteredCoffees(filter);
     }

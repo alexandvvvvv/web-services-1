@@ -4,12 +4,8 @@
     <root id="archive" name="lab1.war">
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
-          <element id="module-output" name="lab1" />
-        </element>
-        <element id="directory" name="lib">
-          <element id="library" level="project" name="javax.jws:javax.jws-api:1.1" />
-          <element id="library" level="project" name="com.sun.xml.ws:jaxws-rt:2.3.2" />
-          <element id="library" level="project" name="org.postgresql:postgresql:9.2-1003-jdbc4" />
+          <element id="module-output" name="j2ee" />
+          <element id="module-output" name="common" />
         </element>
       </element>
     </root>

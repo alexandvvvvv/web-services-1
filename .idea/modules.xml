@@ -2,8 +2,12 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/client/client.iml" filepath="$PROJECT_DIR$/client/client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/common/common.iml" filepath="$PROJECT_DIR$/common/common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/j2ee/j2ee.iml" filepath="$PROJECT_DIR$/j2ee/j2ee.iml" />
+      <module fileurl="file://$PROJECT_DIR$/j2ee-client/j2ee-client.iml" filepath="$PROJECT_DIR$/j2ee-client/j2ee-client.iml" />
       <module fileurl="file://$PROJECT_DIR$/lab1.iml" filepath="$PROJECT_DIR$/lab1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/standalone/standalone.iml" filepath="$PROJECT_DIR$/standalone/standalone.iml" />
+      <module fileurl="file://$PROJECT_DIR$/standalone-client/standalone-client.iml" filepath="$PROJECT_DIR$/standalone-client/standalone-client.iml" />
       <module fileurl="file://$PROJECT_DIR$/web-client/web-client.iml" filepath="$PROJECT_DIR$/web-client/web-client.iml" />
     </modules>
   </component>
