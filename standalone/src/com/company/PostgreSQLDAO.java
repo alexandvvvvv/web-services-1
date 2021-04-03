@@ -77,6 +77,82 @@ public class PostgreSQLDAO {
         return result;
     }
 
+    public long create(Coffee model) {
+        try (Connection connection = ConnectionUtil.getConnection()) {
+            Statement stmt = connection.createStatement();
+
+            ResultSet result = stmt.executeQuery("INSERT INTO COFFEE (NAME, COUNTRY, COST, SORT, STRENGTH) VALUES " +
+                    "('" + model.getName() + "', '" + model.getCountry() + "', '" + model.getCost() +
+                    "', '" + model.getSort().ordinal() + "', '" + model.getStrength() + "') RETURNING id");
+
+            if (result.next()) {
+                return (result.getInt("id"));
+            }
+            throw new SQLException("Creating coffee failed, no ID obtained.");
+
+        } catch (SQLException ex) {
+            Logger.getLogger(PostgreSQLDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return -1;
+    }
+
+
+    public boolean delete(int id) {
+        try (Connection connection = ConnectionUtil.getConnection()) {
+            Statement stmt = connection.createStatement();
+
+            int affectedRows = stmt.executeUpdate("DELETE FROM coffee WHERE id = " + id);
+
+            return affectedRows == 1;
+
+        } catch (SQLException ex) {
+            Logger.getLogger(PostgreSQLDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+
+    public boolean update(int id, Coffee model) {
+        try (Connection connection = ConnectionUtil.getConnection()) {
+            Statement stmt = connection. createStatement();
+            String sql = "UPDATE COFFEE ";
+            boolean anyUpdates = false;
+            if (!isNullOrBlank(model.getName())) {
+                anyUpdates = true;
+                sql += "SET NAME = '" + model.getName() + "'";
+            }
+
+            if (!isNullOrBlank(model.getCountry())) {
+                sql += (anyUpdates ? ", " : " SET ") + "COUNTRY = '" + model.getCountry() + "'";
+                anyUpdates = true;
+            }
+
+            if (model.getCost() != null) {
+                sql += (anyUpdates ? ", " : " SET ") + "COST = '" + model.getCost() + "'";
+                anyUpdates = true;
+            }
+
+            if (model.getSort() != null) {
+                sql += (anyUpdates ? ", " : " SET ") + "SORT = '" + model.getSort().ordinal() + "'";
+                anyUpdates = true;
+            }
+
+            if (model.getStrength() != null) {
+                sql += (anyUpdates ? ", " : " SET ") + "STRENGTH = '" + model.getStrength() + "'";
+                anyUpdates = true;
+            }
+
+            if (anyUpdates) {
+                int affectedRows = stmt.executeUpdate(sql +
+                        " WHERE id = " + id);
+
+                return affectedRows != 0;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(PostgreSQLDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+
     private boolean isNullOrBlank(String string) {
         return string == null || string.isEmpty();
     }
