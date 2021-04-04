@@ -52,4 +52,52 @@ public interface CoffeeWebService {
     @Action(input = "http://company.com/CoffeeWebService/getCoffeesRequest", output = "http://company.com/CoffeeWebService/getCoffeesResponse")
     public List<Coffee> getCoffees();
 
+    /**
+     * 
+     * @param model
+     * @return
+     *     returns long
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "createCoffee", targetNamespace = "http://company.com/", className = "com.company.CreateCoffee")
+    @ResponseWrapper(localName = "createCoffeeResponse", targetNamespace = "http://company.com/", className = "com.company.CreateCoffeeResponse")
+    @Action(input = "http://company.com/CoffeeWebService/createCoffeeRequest", output = "http://company.com/CoffeeWebService/createCoffeeResponse")
+    public long createCoffee(
+        @WebParam(name = "model", targetNamespace = "")
+        Coffee model);
+
+    /**
+     * 
+     * @param id
+     * @return
+     *     returns boolean
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "deleteCoffee", targetNamespace = "http://company.com/", className = "com.company.DeleteCoffee")
+    @ResponseWrapper(localName = "deleteCoffeeResponse", targetNamespace = "http://company.com/", className = "com.company.DeleteCoffeeResponse")
+    @Action(input = "http://company.com/CoffeeWebService/deleteCoffeeRequest", output = "http://company.com/CoffeeWebService/deleteCoffeeResponse")
+    public boolean deleteCoffee(
+        @WebParam(name = "id", targetNamespace = "")
+        int id);
+
+    /**
+     * 
+     * @param model
+     * @param id
+     * @return
+     *     returns boolean
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "updateCoffee", targetNamespace = "http://company.com/", className = "com.company.UpdateCoffee")
+    @ResponseWrapper(localName = "updateCoffeeResponse", targetNamespace = "http://company.com/", className = "com.company.UpdateCoffeeResponse")
+    @Action(input = "http://company.com/CoffeeWebService/updateCoffeeRequest", output = "http://company.com/CoffeeWebService/updateCoffeeResponse")
+    public boolean updateCoffee(
+        @WebParam(name = "id", targetNamespace = "")
+        int id,
+        @WebParam(name = "model", targetNamespace = "")
+        Coffee model);
+
 }
