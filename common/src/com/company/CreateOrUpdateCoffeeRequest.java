@@ -1,17 +1,15 @@
 package com.company;
 
-public class Coffee {
+public class CreateOrUpdateCoffeeRequest {
 
-    private Integer id;
     private Integer cost;
     private String country;
     private String name;
-    private CoffeeSort sort;
+    private String sort;
     private Integer strength;
 
-    public Coffee(){}
-    public Coffee(int id, String name, String country, int cost, CoffeeSort sort, int strength) {
-        this.id = id;
+    public CreateOrUpdateCoffeeRequest(){}
+    public CreateOrUpdateCoffeeRequest(String name, String country, int cost, String sort, int strength) {
         this.cost = cost;
         this.country = country;
         this.name = name;
@@ -44,11 +42,11 @@ public class Coffee {
         this.name = name;
     }
 
-    public CoffeeSort getSort() {
+    public String getSort() {
         return sort;
     }
 
-    public void setSort(CoffeeSort sort) {
+    public void setSort(String sort) {
         this.sort = sort;
     }
 
@@ -60,11 +58,4 @@ public class Coffee {
         this.strength = strength;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 }

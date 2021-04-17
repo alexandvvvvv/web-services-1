@@ -17,13 +17,14 @@ public class PostgreSQLDAO {
             ResultSet rs = stmt.executeQuery("select * from coffee");
 
             while (rs.next()) {
+                int id = rs.getInt("id");
                 String name = rs.getString("name");
                 String country = rs.getString("country");
                 int cost = rs.getInt("cost");
                 int sort = rs.getInt("sort");
                 int strength = rs.getInt("strength");
 
-                Coffee coffee = new Coffee(name, country, cost, CoffeeSort.values()[sort], strength);
+                Coffee coffee = new Coffee(id, name, country, cost, CoffeeSort.values()[sort], strength);
                 result.add(coffee);
             }
         } catch (SQLException ex) {
@@ -41,6 +42,7 @@ public class PostgreSQLDAO {
             ResultSet rs = stmt.executeQuery("select * from coffee");
 
             while (rs.next()) {
+                int id = rs.getInt("id");
                 String name = rs.getString("name");
                 String country = rs.getString("country");
                 int cost = rs.getInt("cost");
@@ -67,7 +69,7 @@ public class PostgreSQLDAO {
                     if (strength != filter.getStrength()) continue;
                 }
 
-                Coffee coffee = new Coffee(name, country, cost, sort, strength);
+                Coffee coffee = new Coffee(id, name, country, cost, sort, strength);
                 result.add(coffee);
             }
         } catch (SQLException ex) {
@@ -111,7 +113,7 @@ public class PostgreSQLDAO {
         return false;
     }
 
-    public boolean update(int id, Coffee model) {
+    public boolean update(int id, CreateOrUpdateCoffeeRequest model) {
         try (Connection connection = ConnectionUtil.getConnection()) {
             Statement stmt = connection. createStatement();
             String sql = "UPDATE COFFEE ";
@@ -132,7 +134,8 @@ public class PostgreSQLDAO {
             }
 
             if (model.getSort() != null) {
-                sql += (anyUpdates ? ", " : " SET ") + "SORT = '" + model.getSort().ordinal() + "'";
+                int sort = CoffeeSort.valueOf(model.getSort()).ordinal();
+                sql += (anyUpdates ? ", " : " SET ") + "SORT = '" + sort + "'";
                 anyUpdates = true;
             }
 

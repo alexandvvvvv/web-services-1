@@ -23,13 +23,14 @@ public class PostgreSQLEEDAO {
             ResultSet rs = stmt.executeQuery("select * from coffee");
 
             while (rs.next()) {
+                int id = rs.getInt("id");
                 String name = rs.getString("name");
                 String country = rs.getString("country");
                 int cost = rs.getInt("cost");
                 int sort = rs.getInt("sort");
                 int strength = rs.getInt("strength");
 
-                Coffee coffee = new Coffee(name, country, cost, CoffeeSort.values()[sort], strength);
+                Coffee coffee = new Coffee(id, name, country, cost, CoffeeSort.values()[sort], strength);
                 result.add(coffee);
             }
         } catch (SQLException ex) {
@@ -47,6 +48,7 @@ public class PostgreSQLEEDAO {
             ResultSet rs = stmt.executeQuery("select * from coffee");
 
             while (rs.next()) {
+                int id = rs.getInt("id");
                 String name = rs.getString("name");
                 String country = rs.getString("country");
                 int cost = rs.getInt("cost");
@@ -73,7 +75,7 @@ public class PostgreSQLEEDAO {
                     if (strength != filter.getStrength()) continue;
                 }
 
-                Coffee coffee = new Coffee(name, country, cost, sort, strength);
+                Coffee coffee = new Coffee(id, name, country, cost, sort, strength);
                 result.add(coffee);
             }
         } catch (SQLException ex) {
