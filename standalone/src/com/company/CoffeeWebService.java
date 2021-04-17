@@ -21,12 +21,15 @@ public class CoffeeWebService {
     }
     @WebMethod(operationName = "getFilteredCoffees")
     public List<Coffee> getFilteredCoffees(@WebParam(name="filter")CoffeeFilter filter) {
+        //todo: change filter sort type to string and check it
         PostgreSQLDAO dao = new PostgreSQLDAO();
         return dao.getFilteredCoffees(filter);
     }
     @WebMethod(operationName = "createCoffee")
     public long createCoffee(@WebParam(name="model") CreateOrUpdateCoffeeRequest model)
             throws CoffeeSortIllegalException {
+        //todo: check all fields are specified
+        //todo: check coffee is unique
         checkSort(model.getSort());
         PostgreSQLDAO dao = new PostgreSQLDAO();
 
