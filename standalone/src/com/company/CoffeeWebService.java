@@ -1,8 +1,12 @@
 package com.company;
 
+import com.company.exceptions.CoffeeMissingPropertyException;
 import com.company.exceptions.CoffeeNotFoundException;
+import com.company.exceptions.CoffeeNotUniqueException;
 import com.company.exceptions.CoffeeSortIllegalException;
+import com.company.faults.CoffeeMissingPropertyFault;
 import com.company.faults.CoffeeNotFoundFault;
+import com.company.faults.CoffeeNotUniqueFault;
 import com.company.faults.CoffeeSortIllegalFault;
 
 import javax.jws.WebMethod;
@@ -20,19 +24,19 @@ public class CoffeeWebService {
         return dao.getCoffees();
     }
     @WebMethod(operationName = "getFilteredCoffees")
-    public List<Coffee> getFilteredCoffees(@WebParam(name="filter")CoffeeFilter filter) {
-        //todo: change filter sort type to string and check it
+    public List<Coffee> getFilteredCoffees(@WebParam(name="filter")CoffeeFilter filter)
+            throws CoffeeSortIllegalException {
+        checkSort(filter.getSort());
         PostgreSQLDAO dao = new PostgreSQLDAO();
         return dao.getFilteredCoffees(filter);
     }
     @WebMethod(operationName = "createCoffee")
     public long createCoffee(@WebParam(name="model") CreateOrUpdateCoffeeRequest model)
-            throws CoffeeSortIllegalException {
-        //todo: check all fields are specified
-        //todo: check coffee is unique
+            throws CoffeeSortIllegalException, CoffeeMissingPropertyException, CoffeeNotUniqueException {
+        checkMissingProperties(model);
         checkSort(model.getSort());
         PostgreSQLDAO dao = new PostgreSQLDAO();
-
+        checkUniqueness(dao, model);
         return dao.create(fromModel(model));
     }
     @WebMethod(operationName = "updateCoffee")
@@ -58,6 +62,19 @@ public class CoffeeWebService {
         }
     }
 
+    private void checkUniqueness(PostgreSQLDAO dao, CreateOrUpdateCoffeeRequest model) throws CoffeeNotUniqueException {
+        List<Coffee> allCoffees = dao.getCoffees();
+        if (!allCoffees.stream().anyMatch(x -> x.getCost() == model.getCost()
+            && x.getSort() == CoffeeSort.valueOf(model.getSort())
+            && x.getName() == model.getName()
+            && x.getCountry() == model.getCountry()
+            && x.getStrength() == model.getStrength())) {
+            CoffeeNotUniqueFault fault = CoffeeNotUniqueFault.defaultInstance();
+            throw new CoffeeNotUniqueException("coffee with specified values already exists", fault);
+        }
+    }
+
+
     private void checkSort(String sort) throws CoffeeSortIllegalException {
         if (sort != null) {
             if (!Arrays.stream(CoffeeSort.values()).anyMatch(x -> x.name().equalsIgnoreCase(sort))) {
@@ -67,6 +84,13 @@ public class CoffeeWebService {
         }
     }
 
+    private void checkMissingProperties(CreateOrUpdateCoffeeRequest model) throws CoffeeMissingPropertyException {
+        if (model.getName() == null || model.getCountry() == null ||
+                model.getSort() == null || model.getStrength() == null || model.getCost() == null) {
+            CoffeeMissingPropertyFault fault = CoffeeMissingPropertyFault.defaultInstance();
+            throw new CoffeeMissingPropertyException("all properties must be specified", fault);
+        }
+    }
     private Coffee fromModel(CreateOrUpdateCoffeeRequest model) {
         return new Coffee(0, model.getName(), model.getCountry(), model.getCost(), CoffeeSort.valueOf(model.getSort()), model.getStrength());
     }

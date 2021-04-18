@@ -68,7 +68,7 @@ public class PostgreSQLEEDAO {
                 }
 
                 if (filter.getSort() != null) {
-                    if (sort != filter.getSort()) continue;
+                    if (sort != CoffeeSort.valueOf(filter.getSort())) continue;
                 }
 
                 if (filter.getStrength() != null) {

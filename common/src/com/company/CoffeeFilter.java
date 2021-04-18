@@ -5,11 +5,11 @@ public class CoffeeFilter {
     private Integer cost;
     private String country;
     private String name;
-    private CoffeeSort sort;
+    private String sort;
     private Integer strength;
 
     public CoffeeFilter() {}
-    public CoffeeFilter(String name, String country, int cost, CoffeeSort sort, int strength) {
+    public CoffeeFilter(String name, String country, int cost, String sort, int strength) {
         this.cost = cost;
         this.country = country;
         this.name = name;
@@ -42,11 +42,11 @@ public class CoffeeFilter {
         this.name = name;
     }
 
-    public CoffeeSort getSort() {
+    public String getSort() {
         return sort;
     }
 
-    public void setSort(CoffeeSort sort) {
+    public void setSort(String sort) {
         this.sort = sort;
     }
 
