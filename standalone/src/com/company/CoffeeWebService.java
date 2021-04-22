@@ -36,15 +36,16 @@ public class CoffeeWebService {
         checkMissingProperties(model);
         checkSort(model.getSort());
         PostgreSQLDAO dao = new PostgreSQLDAO();
-        checkUniqueness(dao, model);
+        checkUniqueness(dao, model, null);
         return dao.create(fromModel(model));
     }
     @WebMethod(operationName = "updateCoffee")
     public boolean updateCoffee(@WebParam(name="id")int id, @WebParam(name="model") CreateOrUpdateCoffeeRequest model)
-            throws CoffeeNotFoundException, CoffeeSortIllegalException  {
+            throws CoffeeNotFoundException, CoffeeSortIllegalException, CoffeeNotUniqueException  {
         checkSort(model.getSort());
         PostgreSQLDAO dao = new PostgreSQLDAO();
         checkCoffeeExists(id, dao);
+        checkUniqueness(dao, model, id);
         return dao.update(id, model);
     }
     @WebMethod(operationName = "deleteCoffee")
@@ -62,12 +63,13 @@ public class CoffeeWebService {
         }
     }
 
-    private void checkUniqueness(PostgreSQLDAO dao, CreateOrUpdateCoffeeRequest model) throws CoffeeNotUniqueException {
+    private void checkUniqueness(PostgreSQLDAO dao, CreateOrUpdateCoffeeRequest model, Integer id) throws CoffeeNotUniqueException {
         List<Coffee> allCoffees = dao.getCoffees();
-        if (!allCoffees.stream().anyMatch(x -> x.getCost() == model.getCost()
+        if (allCoffees.stream().anyMatch(x -> (id == null || x.getId() != id)
+            && x.getCost() == model.getCost()
             && x.getSort() == CoffeeSort.valueOf(model.getSort())
-            && x.getName() == model.getName()
-            && x.getCountry() == model.getCountry()
+            && x.getName().equalsIgnoreCase(model.getName())
+            && x.getCountry().equalsIgnoreCase(model.getCountry())
             && x.getStrength() == model.getStrength())) {
             CoffeeNotUniqueFault fault = CoffeeNotUniqueFault.defaultInstance();
             throw new CoffeeNotUniqueException("coffee with specified values already exists", fault);

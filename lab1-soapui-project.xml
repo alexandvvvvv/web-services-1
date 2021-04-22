@@ -19,6 +19,24 @@
   <message name="getCoffeesResponse">
     <part name="parameters" element="tns:getCoffeesResponse"/>
   </message>
+  <message name="updateCoffee">
+    <part name="parameters" element="tns:updateCoffee"/>
+  </message>
+  <message name="updateCoffeeResponse">
+    <part name="parameters" element="tns:updateCoffeeResponse"/>
+  </message>
+  <message name="createCoffee">
+    <part name="parameters" element="tns:createCoffee"/>
+  </message>
+  <message name="createCoffeeResponse">
+    <part name="parameters" element="tns:createCoffeeResponse"/>
+  </message>
+  <message name="deleteCoffee">
+    <part name="parameters" element="tns:deleteCoffee"/>
+  </message>
+  <message name="deleteCoffeeResponse">
+    <part name="parameters" element="tns:deleteCoffeeResponse"/>
+  </message>
   <portType name="CoffeeWebService">
     <operation name="getFilteredCoffees">
       <input wsam:Action="http://company.com/CoffeeWebService/getFilteredCoffeesRequest" message="tns:getFilteredCoffees"/>
@@ -27,6 +45,18 @@
     <operation name="getCoffees">
       <input wsam:Action="http://company.com/CoffeeWebService/getCoffeesRequest" message="tns:getCoffees"/>
       <output wsam:Action="http://company.com/CoffeeWebService/getCoffeesResponse" message="tns:getCoffeesResponse"/>
+    </operation>
+    <operation name="updateCoffee">
+      <input wsam:Action="http://company.com/CoffeeWebService/updateCoffeeRequest" message="tns:updateCoffee"/>
+      <output wsam:Action="http://company.com/CoffeeWebService/updateCoffeeResponse" message="tns:updateCoffeeResponse"/>
+    </operation>
+    <operation name="createCoffee">
+      <input wsam:Action="http://company.com/CoffeeWebService/createCoffeeRequest" message="tns:createCoffee"/>
+      <output wsam:Action="http://company.com/CoffeeWebService/createCoffeeResponse" message="tns:createCoffeeResponse"/>
+    </operation>
+    <operation name="deleteCoffee">
+      <input wsam:Action="http://company.com/CoffeeWebService/deleteCoffeeRequest" message="tns:deleteCoffee"/>
+      <output wsam:Action="http://company.com/CoffeeWebService/deleteCoffeeResponse" message="tns:deleteCoffeeResponse"/>
     </operation>
   </portType>
   <binding name="CoffeeWebServicePortBinding" type="tns:CoffeeWebService">
@@ -49,6 +79,33 @@
         <soap:body use="literal"/>
       </output>
     </operation>
+    <operation name="updateCoffee">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="createCoffee">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="deleteCoffee">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
   </binding>
   <service name="CoffeeService">
     <port name="CoffeeWebServicePort" binding="tns:CoffeeWebServicePortBinding">
@@ -57,16 +114,20 @@
   </service>
 </definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part><con:part><con:url>http://localhost:8082/CoffeeService?xsd=1</con:url><con:content><![CDATA[<!--Published by JAX-WS RI (http://jax-ws.java.net). RI's version is JAX-WS RI 2.2.9-b130926.1035 svn-revision#5f6196f2b90e9460065a4c2f4e30e065b245e51e.-->
 <xs:schema version="1.0" targetNamespace="http://company.com/" xmlns:tns="http://company.com/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="createCoffee" type="tns:createCoffee"/>
+  <xs:element name="createCoffeeResponse" type="tns:createCoffeeResponse"/>
+  <xs:element name="deleteCoffee" type="tns:deleteCoffee"/>
+  <xs:element name="deleteCoffeeResponse" type="tns:deleteCoffeeResponse"/>
   <xs:element name="getCoffees" type="tns:getCoffees"/>
   <xs:element name="getCoffeesResponse" type="tns:getCoffeesResponse"/>
   <xs:element name="getFilteredCoffees" type="tns:getFilteredCoffees"/>
   <xs:element name="getFilteredCoffeesResponse" type="tns:getFilteredCoffeesResponse"/>
-  <xs:complexType name="getCoffees">
-    <xs:sequence/>
-  </xs:complexType>
-  <xs:complexType name="getCoffeesResponse">
+  <xs:element name="updateCoffee" type="tns:updateCoffee"/>
+  <xs:element name="updateCoffeeResponse" type="tns:updateCoffeeResponse"/>
+  <xs:complexType name="updateCoffee">
     <xs:sequence>
-      <xs:element name="return" type="tns:coffee" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="id" type="xs:int"/>
+      <xs:element name="model" type="tns:coffee" minOccurs="0"/>
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="coffee">
@@ -76,6 +137,39 @@
       <xs:element name="name" type="xs:string" minOccurs="0"/>
       <xs:element name="sort" type="tns:coffeeSort" minOccurs="0"/>
       <xs:element name="strength" type="xs:int" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="updateCoffeeResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="deleteCoffee">
+    <xs:sequence>
+      <xs:element name="id" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="deleteCoffeeResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getCoffees">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="getCoffeesResponse">
+    <xs:sequence>
+      <xs:element name="return" type="tns:coffee" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="createCoffee">
+    <xs:sequence>
+      <xs:element name="model" type="tns:coffee" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="createCoffeeResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:long"/>
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="getFilteredCoffees">
@@ -132,7 +226,47 @@
          </filter>\r
       </com:getFilteredCoffees>\r
    </soapenv:Body>\r
-</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://company.com/CoffeeWebService/getFilteredCoffeesRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:interface xsi:type="con:WsdlInterface" id="30c8aed0-a5dc-40e3-b752-dc703044273e" wsaVersion="NONE" name="CoffeeEEWebServicePortBinding" type="wsdl" bindingName="{http://company.com/}CoffeeEEWebServicePortBinding" soapVersion="1_1" anonymous="optional" definition="http://localhost:8081/CoffeeService?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://localhost:8081/CoffeeService?wsdl"><con:part><con:url>http://localhost:8081/CoffeeService?wsdl</con:url><con:content><![CDATA[<!--Published by JAX-WS RI (http://jax-ws.java.net). RI's version is JAX-WS RI 2.3.2 git-revision#3d0bba4.-->
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://company.com/CoffeeWebService/getFilteredCoffeesRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="42a0cad3-afa4-4e2b-bb8c-08ca12d3c5ed" isOneWay="false" action="" name="createCoffee" bindingOperationName="createCoffee" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="d5f81d05-9c47-4d9f-99ae-ba9a255f40e1" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8082/CoffeeService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:com="http://company.com/">\r
+   <soapenv:Header/>\r
+   <soapenv:Body>\r
+      <com:createCoffee>\r
+         <!--Optional:-->\r
+         <model>\r
+            <!--Optional:-->\r
+            <cost>15</cost>\r
+            <!--Optional:-->\r
+            <country>Kenia</country>\r
+            <!--Optional:-->\r
+            <name>CoffeeTrip</name>\r
+            <!--Optional:-->\r
+            <sort>ARABIC</sort>\r
+            <!--Optional:-->\r
+            <strength>10</strength>\r
+         </model>\r
+      </com:createCoffee>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://company.com/CoffeeWebService/createCoffeeRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="18e13d77-a426-4f0d-99b3-9620773aaf50" isOneWay="false" action="" name="updateCoffee" bindingOperationName="updateCoffee" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="def393b9-ff17-4645-85f4-2418c2e72f39" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8082/CoffeeService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:com="http://company.com/">\r
+   <soapenv:Header/>\r
+   <soapenv:Body>\r
+      <com:updateCoffee>\r
+         <id>2</id>\r
+         <!--Optional:-->\r
+         <model>\r
+            <!--Optional:-->\r
+            <name>INDIA coffee</name>\r
+            <!--Optional:-->\r
+          \r<cost>10</cost>
+         </model>\r
+      </com:updateCoffee>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://company.com/CoffeeWebService/updateCoffeeRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="eeb91a31-4220-42a7-93d1-c3a2b7545aa2" isOneWay="false" action="" name="deleteCoffee" bindingOperationName="deleteCoffee" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="be997968-e805-43e8-9092-12c8edbd5b24" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8082/CoffeeService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:com="http://company.com/">\r
+   <soapenv:Header/>\r
+   <soapenv:Body>\r
+      <com:deleteCoffee>\r
+         <id>4</id>\r
+      </com:deleteCoffee>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://company.com/CoffeeWebService/deleteCoffeeRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:interface xsi:type="con:WsdlInterface" id="30c8aed0-a5dc-40e3-b752-dc703044273e" wsaVersion="NONE" name="CoffeeEEWebServicePortBinding" type="wsdl" bindingName="{http://company.com/}CoffeeEEWebServicePortBinding" soapVersion="1_1" anonymous="optional" definition="http://localhost:8081/CoffeeService?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://localhost:8081/CoffeeService?wsdl"><con:part><con:url>http://localhost:8081/CoffeeService?wsdl</con:url><con:content><![CDATA[<!--Published by JAX-WS RI (http://jax-ws.java.net). RI's version is JAX-WS RI 2.3.2 git-revision#3d0bba4.-->
 <!--Generated by JAX-WS RI (https://github.com/eclipse-ee4j/metro-jax-ws). RI's version is JAX-WS RI 2.3.2 git-revision#3d0bba4.-->
 <definitions targetNamespace="http://company.com/" name="CoffeeService" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:wsp="http://www.w3.org/ns/ws-policy" xmlns:wsp1_2="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://company.com/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.xmlsoap.org/wsdl/">
   <types>
