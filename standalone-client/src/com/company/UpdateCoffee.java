@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="model" type="{http://company.com/}coffee" minOccurs="0"/>
+ *         &lt;element name="model" type="{http://company.com/}createOrUpdateCoffeeRequest" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlType;
 public class UpdateCoffee {
 
     protected int id;
-    protected Coffee model;
+    protected CreateOrUpdateCoffeeRequest model;
 
     /**
      * Gets the value of the id property.
@@ -57,10 +57,10 @@ public class UpdateCoffee {
      * 
      * @return
      *     possible object is
-     *     {@link Coffee }
+     *     {@link CreateOrUpdateCoffeeRequest }
      *     
      */
-    public Coffee getModel() {
+    public CreateOrUpdateCoffeeRequest getModel() {
         return model;
     }
 
@@ -69,10 +69,10 @@ public class UpdateCoffee {
      * 
      * @param value
      *     allowed object is
-     *     {@link Coffee }
+     *     {@link CreateOrUpdateCoffeeRequest }
      *     
      */
-    public void setModel(Coffee value) {
+    public void setModel(CreateOrUpdateCoffeeRequest value) {
         this.model = value;
     }
 

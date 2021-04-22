@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for coffeeFilter complex type.
+ * <p>Java class for createOrUpdateCoffeeRequest complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="coffeeFilter">
+ * &lt;complexType name="createOrUpdateCoffeeRequest">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -30,14 +30,14 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "coffeeFilter", propOrder = {
+@XmlType(name = "createOrUpdateCoffeeRequest", propOrder = {
     "cost",
     "country",
     "name",
     "sort",
     "strength"
 })
-public class CoffeeFilter {
+public class CreateOrUpdateCoffeeRequest {
 
     protected Integer cost;
     protected String country;

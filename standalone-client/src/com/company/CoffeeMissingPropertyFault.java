@@ -7,16 +7,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for createCoffee complex type.
+ * <p>Java class for coffeeMissingPropertyFault complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="createCoffee">
+ * &lt;complexType name="coffeeMissingPropertyFault">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="model" type="{http://company.com/}createOrUpdateCoffeeRequest" minOccurs="0"/>
+ *         &lt;element name="message" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -26,35 +26,35 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "createCoffee", propOrder = {
-    "model"
+@XmlType(name = "coffeeMissingPropertyFault", propOrder = {
+    "message"
 })
-public class CreateCoffee {
+public class CoffeeMissingPropertyFault {
 
-    protected CreateOrUpdateCoffeeRequest model;
+    protected String message;
 
     /**
-     * Gets the value of the model property.
+     * Gets the value of the message property.
      * 
      * @return
      *     possible object is
-     *     {@link CreateOrUpdateCoffeeRequest }
+     *     {@link String }
      *     
      */
-    public CreateOrUpdateCoffeeRequest getModel() {
-        return model;
+    public String getMessage() {
+        return message;
     }
 
     /**
-     * Sets the value of the model property.
+     * Sets the value of the message property.
      * 
      * @param value
      *     allowed object is
-     *     {@link CreateOrUpdateCoffeeRequest }
+     *     {@link String }
      *     
      */
-    public void setModel(CreateOrUpdateCoffeeRequest value) {
-        this.model = value;
+    public void setMessage(String value) {
+        this.message = value;
     }
 
 }

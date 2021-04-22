@@ -19,48 +19,53 @@ public class WebServiceClient {
             temp = scanner.nextLine();
 
             Integer type = Integer.parseInt((temp));
-            switch (type) {
-                case 0:
-                    return;
-                case 1:
-                    listFiltered(personService, scanner);
-                    break;
-                case 2:
-                    create(personService, scanner);
-                    break;
-                case 3:
-                    update(personService, scanner);
-                    break;
-                case 4:
-                    delete(personService, scanner);
-                    break;
-                default:
-                    System.out.println("ALlowed input is from 1 to 4");
+            try {
+                switch (type) {
+                    case 0:
+                        return;
+                    case 1:
+                        listFiltered(personService, scanner);
+                        break;
+                    case 2:
+                        create(personService, scanner);
+                        break;
+                    case 3:
+                        update(personService, scanner);
+                        break;
+                    case 4:
+                        delete(personService, scanner);
+                        break;
+                    default:
+                        System.out.println("ALlowed input is from 1 to 4");
+                }
+            }
+            catch (Exception ex) {
+                System.out.println("Error: " + ex.getMessage());
             }
 
         }
     }
 
-    private static void create(CoffeeService service, Scanner scanner) {
-        Coffee model = getCoffee(scanner);
+    private static void create(CoffeeService service, Scanner scanner) throws CoffeeMissingPropertyException, CoffeeNotUniqueException, CoffeeSortIllegalException{
+        CreateOrUpdateCoffeeRequest model = getCoffee(scanner);
         long id = service.getCoffeeWebServicePort().createCoffee(model);
         System.out.println("Created coffee with ID: " + id);
     }
 
-    private static void update(CoffeeService service, Scanner scanner) {
+    private static void update(CoffeeService service, Scanner scanner) throws CoffeeNotFoundException, CoffeeNotUniqueException, CoffeeSortIllegalException {
         int id = getId(scanner);
-        Coffee model = getCoffee(scanner);
+        CreateOrUpdateCoffeeRequest model = getCoffee(scanner);
         boolean result = service.getCoffeeWebServicePort().updateCoffee(id, model);
         System.out.println(result ? "Updated " : "Failed to update " + "coffee with ID:  " + id);
     }
 
-    private static void delete(CoffeeService service, Scanner scanner) {
+    private static void delete(CoffeeService service, Scanner scanner) throws CoffeeNotFoundException {
         int id = getId(scanner);
         boolean result = service.getCoffeeWebServicePort().deleteCoffee(id);
         System.out.println(result ? "Deleted " : "Failed to delete " + "coffee with ID:  " + id);
     }
 
-    private static void listFiltered(CoffeeService service, Scanner scanner) {
+    private static void listFiltered(CoffeeService service, Scanner scanner) throws CoffeeSortIllegalException {
         CoffeeFilter filter = new CoffeeFilter();
         String temp;
 
@@ -79,7 +84,7 @@ public class WebServiceClient {
         System.out.println("Enter sort (ARABIC or ROBUST):");
         temp = scanner.nextLine();
         if (!temp.isEmpty()) {
-            filter.setSort(CoffeeSort.fromValue(temp));
+            filter.setSort(temp);
         }
 
         System.out.println("Enter strength (1..10):");
@@ -117,8 +122,8 @@ public class WebServiceClient {
         }
     }
 
-    private static Coffee getCoffee(Scanner scanner) {
-        Coffee model = new Coffee();
+    private static CreateOrUpdateCoffeeRequest getCoffee(Scanner scanner) {
+        CreateOrUpdateCoffeeRequest model = new CreateOrUpdateCoffeeRequest();
         String temp;
 
         System.out.println("Enter name:");
@@ -136,7 +141,7 @@ public class WebServiceClient {
         System.out.println("Enter sort (ARABIC or ROBUST):");
         temp = scanner.nextLine();
         if (!temp.isEmpty()) {
-            model.setSort(CoffeeSort.fromValue(temp));
+            model.setSort(temp);
         }
 
         System.out.println("Enter strength (1..10):");

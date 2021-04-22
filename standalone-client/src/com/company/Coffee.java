@@ -19,6 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;element name="cost" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *         &lt;element name="country" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="sort" type="{http://company.com/}coffeeSort" minOccurs="0"/>
  *         &lt;element name="strength" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
@@ -34,6 +35,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "coffee", propOrder = {
     "cost",
     "country",
+    "id",
     "name",
     "sort",
     "strength"
@@ -42,6 +44,7 @@ public class Coffee {
 
     protected Integer cost;
     protected String country;
+    protected Integer id;
     protected String name;
     @XmlSchemaType(name = "string")
     protected CoffeeSort sort;
@@ -93,6 +96,30 @@ public class Coffee {
      */
     public void setCountry(String value) {
         this.country = value;
+    }
+
+    /**
+     * Gets the value of the id property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
+     */
+    public Integer getId() {
+        return id;
+    }
+
+    /**
+     * Sets the value of the id property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
+     */
+    public void setId(Integer value) {
+        this.id = value;
     }
 
     /**

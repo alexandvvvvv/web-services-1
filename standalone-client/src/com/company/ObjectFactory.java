@@ -24,16 +24,20 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _CreateCoffee_QNAME = new QName("http://company.com/", "createCoffee");
-    private final static QName _CreateCoffeeResponse_QNAME = new QName("http://company.com/", "createCoffeeResponse");
     private final static QName _DeleteCoffee_QNAME = new QName("http://company.com/", "deleteCoffee");
     private final static QName _UpdateCoffee_QNAME = new QName("http://company.com/", "updateCoffee");
+    private final static QName _CoffeeNotUniqueException_QNAME = new QName("http://company.com/", "CoffeeNotUniqueException");
     private final static QName _DeleteCoffeeResponse_QNAME = new QName("http://company.com/", "deleteCoffeeResponse");
-    private final static QName _GetCoffees_QNAME = new QName("http://company.com/", "getCoffees");
-    private final static QName _GetFilteredCoffees_QNAME = new QName("http://company.com/", "getFilteredCoffees");
-    private final static QName _GetCoffeesResponse_QNAME = new QName("http://company.com/", "getCoffeesResponse");
+    private final static QName _CoffeeNotFoundException_QNAME = new QName("http://company.com/", "CoffeeNotFoundException");
+    private final static QName _CoffeeSortIllegalException_QNAME = new QName("http://company.com/", "CoffeeSortIllegalException");
     private final static QName _GetFilteredCoffeesResponse_QNAME = new QName("http://company.com/", "getFilteredCoffeesResponse");
     private final static QName _UpdateCoffeeResponse_QNAME = new QName("http://company.com/", "updateCoffeeResponse");
+    private final static QName _CreateCoffee_QNAME = new QName("http://company.com/", "createCoffee");
+    private final static QName _CreateCoffeeResponse_QNAME = new QName("http://company.com/", "createCoffeeResponse");
+    private final static QName _GetCoffees_QNAME = new QName("http://company.com/", "getCoffees");
+    private final static QName _GetFilteredCoffees_QNAME = new QName("http://company.com/", "getFilteredCoffees");
+    private final static QName _CoffeeMissingPropertyException_QNAME = new QName("http://company.com/", "CoffeeMissingPropertyException");
+    private final static QName _GetCoffeesResponse_QNAME = new QName("http://company.com/", "getCoffeesResponse");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: com.company
@@ -43,19 +47,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GetFilteredCoffees }
+     * Create an instance of {@link CoffeeNotFoundFault }
      * 
      */
-    public GetFilteredCoffees createGetFilteredCoffees() {
-        return new GetFilteredCoffees();
+    public CoffeeNotFoundFault createCoffeeNotFoundFault() {
+        return new CoffeeNotFoundFault();
     }
 
     /**
-     * Create an instance of {@link GetCoffeesResponse }
+     * Create an instance of {@link CoffeeSortIllegalFault }
      * 
      */
-    public GetCoffeesResponse createGetCoffeesResponse() {
-        return new GetCoffeesResponse();
+    public CoffeeSortIllegalFault createCoffeeSortIllegalFault() {
+        return new CoffeeSortIllegalFault();
     }
 
     /**
@@ -72,6 +76,62 @@ public class ObjectFactory {
      */
     public UpdateCoffeeResponse createUpdateCoffeeResponse() {
         return new UpdateCoffeeResponse();
+    }
+
+    /**
+     * Create an instance of {@link DeleteCoffee }
+     * 
+     */
+    public DeleteCoffee createDeleteCoffee() {
+        return new DeleteCoffee();
+    }
+
+    /**
+     * Create an instance of {@link UpdateCoffee }
+     * 
+     */
+    public UpdateCoffee createUpdateCoffee() {
+        return new UpdateCoffee();
+    }
+
+    /**
+     * Create an instance of {@link CoffeeNotUniqueFault }
+     * 
+     */
+    public CoffeeNotUniqueFault createCoffeeNotUniqueFault() {
+        return new CoffeeNotUniqueFault();
+    }
+
+    /**
+     * Create an instance of {@link DeleteCoffeeResponse }
+     * 
+     */
+    public DeleteCoffeeResponse createDeleteCoffeeResponse() {
+        return new DeleteCoffeeResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetFilteredCoffees }
+     * 
+     */
+    public GetFilteredCoffees createGetFilteredCoffees() {
+        return new GetFilteredCoffees();
+    }
+
+    /**
+     * Create an instance of {@link CoffeeMissingPropertyFault }
+     * 
+     */
+    public CoffeeMissingPropertyFault createCoffeeMissingPropertyFault() {
+        return new CoffeeMissingPropertyFault();
+    }
+
+    /**
+     * Create an instance of {@link GetCoffeesResponse }
+     * 
+     */
+    public GetCoffeesResponse createGetCoffeesResponse() {
+        return new GetCoffeesResponse();
     }
 
     /**
@@ -99,27 +159,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link DeleteCoffee }
+     * Create an instance of {@link CreateOrUpdateCoffeeRequest }
      * 
      */
-    public DeleteCoffee createDeleteCoffee() {
-        return new DeleteCoffee();
-    }
-
-    /**
-     * Create an instance of {@link UpdateCoffee }
-     * 
-     */
-    public UpdateCoffee createUpdateCoffee() {
-        return new UpdateCoffee();
-    }
-
-    /**
-     * Create an instance of {@link DeleteCoffeeResponse }
-     * 
-     */
-    public DeleteCoffeeResponse createDeleteCoffeeResponse() {
-        return new DeleteCoffeeResponse();
+    public CreateOrUpdateCoffeeRequest createCreateOrUpdateCoffeeRequest() {
+        return new CreateOrUpdateCoffeeRequest();
     }
 
     /**
@@ -136,24 +180,6 @@ public class ObjectFactory {
      */
     public CoffeeFilter createCoffeeFilter() {
         return new CoffeeFilter();
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link CreateCoffee }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://company.com/", name = "createCoffee")
-    public JAXBElement<CreateCoffee> createCreateCoffee(CreateCoffee value) {
-        return new JAXBElement<CreateCoffee>(_CreateCoffee_QNAME, CreateCoffee.class, null, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link CreateCoffeeResponse }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://company.com/", name = "createCoffeeResponse")
-    public JAXBElement<CreateCoffeeResponse> createCreateCoffeeResponse(CreateCoffeeResponse value) {
-        return new JAXBElement<CreateCoffeeResponse>(_CreateCoffeeResponse_QNAME, CreateCoffeeResponse.class, null, value);
     }
 
     /**
@@ -175,12 +201,75 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link CoffeeNotUniqueFault }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://company.com/", name = "CoffeeNotUniqueException")
+    public JAXBElement<CoffeeNotUniqueFault> createCoffeeNotUniqueException(CoffeeNotUniqueFault value) {
+        return new JAXBElement<CoffeeNotUniqueFault>(_CoffeeNotUniqueException_QNAME, CoffeeNotUniqueFault.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link DeleteCoffeeResponse }{@code >}}
      * 
      */
     @XmlElementDecl(namespace = "http://company.com/", name = "deleteCoffeeResponse")
     public JAXBElement<DeleteCoffeeResponse> createDeleteCoffeeResponse(DeleteCoffeeResponse value) {
         return new JAXBElement<DeleteCoffeeResponse>(_DeleteCoffeeResponse_QNAME, DeleteCoffeeResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link CoffeeNotFoundFault }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://company.com/", name = "CoffeeNotFoundException")
+    public JAXBElement<CoffeeNotFoundFault> createCoffeeNotFoundException(CoffeeNotFoundFault value) {
+        return new JAXBElement<CoffeeNotFoundFault>(_CoffeeNotFoundException_QNAME, CoffeeNotFoundFault.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link CoffeeSortIllegalFault }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://company.com/", name = "CoffeeSortIllegalException")
+    public JAXBElement<CoffeeSortIllegalFault> createCoffeeSortIllegalException(CoffeeSortIllegalFault value) {
+        return new JAXBElement<CoffeeSortIllegalFault>(_CoffeeSortIllegalException_QNAME, CoffeeSortIllegalFault.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link GetFilteredCoffeesResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://company.com/", name = "getFilteredCoffeesResponse")
+    public JAXBElement<GetFilteredCoffeesResponse> createGetFilteredCoffeesResponse(GetFilteredCoffeesResponse value) {
+        return new JAXBElement<GetFilteredCoffeesResponse>(_GetFilteredCoffeesResponse_QNAME, GetFilteredCoffeesResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link UpdateCoffeeResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://company.com/", name = "updateCoffeeResponse")
+    public JAXBElement<UpdateCoffeeResponse> createUpdateCoffeeResponse(UpdateCoffeeResponse value) {
+        return new JAXBElement<UpdateCoffeeResponse>(_UpdateCoffeeResponse_QNAME, UpdateCoffeeResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link CreateCoffee }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://company.com/", name = "createCoffee")
+    public JAXBElement<CreateCoffee> createCreateCoffee(CreateCoffee value) {
+        return new JAXBElement<CreateCoffee>(_CreateCoffee_QNAME, CreateCoffee.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link CreateCoffeeResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://company.com/", name = "createCoffeeResponse")
+    public JAXBElement<CreateCoffeeResponse> createCreateCoffeeResponse(CreateCoffeeResponse value) {
+        return new JAXBElement<CreateCoffeeResponse>(_CreateCoffeeResponse_QNAME, CreateCoffeeResponse.class, null, value);
     }
 
     /**
@@ -202,30 +291,21 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link CoffeeMissingPropertyFault }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://company.com/", name = "CoffeeMissingPropertyException")
+    public JAXBElement<CoffeeMissingPropertyFault> createCoffeeMissingPropertyException(CoffeeMissingPropertyFault value) {
+        return new JAXBElement<CoffeeMissingPropertyFault>(_CoffeeMissingPropertyException_QNAME, CoffeeMissingPropertyFault.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link GetCoffeesResponse }{@code >}}
      * 
      */
     @XmlElementDecl(namespace = "http://company.com/", name = "getCoffeesResponse")
     public JAXBElement<GetCoffeesResponse> createGetCoffeesResponse(GetCoffeesResponse value) {
         return new JAXBElement<GetCoffeesResponse>(_GetCoffeesResponse_QNAME, GetCoffeesResponse.class, null, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link GetFilteredCoffeesResponse }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://company.com/", name = "getFilteredCoffeesResponse")
-    public JAXBElement<GetFilteredCoffeesResponse> createGetFilteredCoffeesResponse(GetFilteredCoffeesResponse value) {
-        return new JAXBElement<GetFilteredCoffeesResponse>(_GetFilteredCoffeesResponse_QNAME, GetFilteredCoffeesResponse.class, null, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link UpdateCoffeeResponse }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://company.com/", name = "updateCoffeeResponse")
-    public JAXBElement<UpdateCoffeeResponse> createUpdateCoffeeResponse(UpdateCoffeeResponse value) {
-        return new JAXBElement<UpdateCoffeeResponse>(_UpdateCoffeeResponse_QNAME, UpdateCoffeeResponse.class, null, value);
     }
 
 }

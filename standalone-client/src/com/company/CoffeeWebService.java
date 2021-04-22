@@ -8,6 +8,7 @@ import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.ws.Action;
+import javax.xml.ws.FaultAction;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 
@@ -27,21 +28,6 @@ public interface CoffeeWebService {
 
     /**
      * 
-     * @param filter
-     * @return
-     *     returns java.util.List<com.company.Coffee>
-     */
-    @WebMethod
-    @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getFilteredCoffees", targetNamespace = "http://company.com/", className = "com.company.GetFilteredCoffees")
-    @ResponseWrapper(localName = "getFilteredCoffeesResponse", targetNamespace = "http://company.com/", className = "com.company.GetFilteredCoffeesResponse")
-    @Action(input = "http://company.com/CoffeeWebService/getFilteredCoffeesRequest", output = "http://company.com/CoffeeWebService/getFilteredCoffeesResponse")
-    public List<Coffee> getFilteredCoffees(
-        @WebParam(name = "filter", targetNamespace = "")
-        CoffeeFilter filter);
-
-    /**
-     * 
      * @return
      *     returns java.util.List<com.company.Coffee>
      */
@@ -54,33 +40,47 @@ public interface CoffeeWebService {
 
     /**
      * 
+     * @param filter
+     * @return
+     *     returns java.util.List<com.company.Coffee>
+     * @throws CoffeeSortIllegalException
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "getFilteredCoffees", targetNamespace = "http://company.com/", className = "com.company.GetFilteredCoffees")
+    @ResponseWrapper(localName = "getFilteredCoffeesResponse", targetNamespace = "http://company.com/", className = "com.company.GetFilteredCoffeesResponse")
+    @Action(input = "http://company.com/CoffeeWebService/getFilteredCoffeesRequest", output = "http://company.com/CoffeeWebService/getFilteredCoffeesResponse", fault = {
+        @FaultAction(className = CoffeeSortIllegalException.class, value = "http://company.com/CoffeeWebService/getFilteredCoffees/Fault/CoffeeSortIllegalException")
+    })
+    public List<Coffee> getFilteredCoffees(
+        @WebParam(name = "filter", targetNamespace = "")
+        CoffeeFilter filter)
+        throws CoffeeSortIllegalException
+    ;
+
+    /**
+     * 
      * @param model
      * @return
      *     returns long
+     * @throws CoffeeMissingPropertyException
+     * @throws CoffeeNotUniqueException
+     * @throws CoffeeSortIllegalException
      */
     @WebMethod
     @WebResult(targetNamespace = "")
     @RequestWrapper(localName = "createCoffee", targetNamespace = "http://company.com/", className = "com.company.CreateCoffee")
     @ResponseWrapper(localName = "createCoffeeResponse", targetNamespace = "http://company.com/", className = "com.company.CreateCoffeeResponse")
-    @Action(input = "http://company.com/CoffeeWebService/createCoffeeRequest", output = "http://company.com/CoffeeWebService/createCoffeeResponse")
+    @Action(input = "http://company.com/CoffeeWebService/createCoffeeRequest", output = "http://company.com/CoffeeWebService/createCoffeeResponse", fault = {
+        @FaultAction(className = CoffeeSortIllegalException.class, value = "http://company.com/CoffeeWebService/createCoffee/Fault/CoffeeSortIllegalException"),
+        @FaultAction(className = CoffeeMissingPropertyException.class, value = "http://company.com/CoffeeWebService/createCoffee/Fault/CoffeeMissingPropertyException"),
+        @FaultAction(className = CoffeeNotUniqueException.class, value = "http://company.com/CoffeeWebService/createCoffee/Fault/CoffeeNotUniqueException")
+    })
     public long createCoffee(
         @WebParam(name = "model", targetNamespace = "")
-        Coffee model);
-
-    /**
-     * 
-     * @param id
-     * @return
-     *     returns boolean
-     */
-    @WebMethod
-    @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "deleteCoffee", targetNamespace = "http://company.com/", className = "com.company.DeleteCoffee")
-    @ResponseWrapper(localName = "deleteCoffeeResponse", targetNamespace = "http://company.com/", className = "com.company.DeleteCoffeeResponse")
-    @Action(input = "http://company.com/CoffeeWebService/deleteCoffeeRequest", output = "http://company.com/CoffeeWebService/deleteCoffeeResponse")
-    public boolean deleteCoffee(
-        @WebParam(name = "id", targetNamespace = "")
-        int id);
+        CreateOrUpdateCoffeeRequest model)
+        throws CoffeeMissingPropertyException, CoffeeNotUniqueException, CoffeeSortIllegalException
+    ;
 
     /**
      * 
@@ -88,16 +88,45 @@ public interface CoffeeWebService {
      * @param id
      * @return
      *     returns boolean
+     * @throws CoffeeNotFoundException
+     * @throws CoffeeSortIllegalException
+     * @throws CoffeeNotUniqueException
      */
     @WebMethod
     @WebResult(targetNamespace = "")
     @RequestWrapper(localName = "updateCoffee", targetNamespace = "http://company.com/", className = "com.company.UpdateCoffee")
     @ResponseWrapper(localName = "updateCoffeeResponse", targetNamespace = "http://company.com/", className = "com.company.UpdateCoffeeResponse")
-    @Action(input = "http://company.com/CoffeeWebService/updateCoffeeRequest", output = "http://company.com/CoffeeWebService/updateCoffeeResponse")
+    @Action(input = "http://company.com/CoffeeWebService/updateCoffeeRequest", output = "http://company.com/CoffeeWebService/updateCoffeeResponse", fault = {
+        @FaultAction(className = CoffeeNotFoundException.class, value = "http://company.com/CoffeeWebService/updateCoffee/Fault/CoffeeNotFoundException"),
+        @FaultAction(className = CoffeeSortIllegalException.class, value = "http://company.com/CoffeeWebService/updateCoffee/Fault/CoffeeSortIllegalException"),
+        @FaultAction(className = CoffeeNotUniqueException.class, value = "http://company.com/CoffeeWebService/updateCoffee/Fault/CoffeeNotUniqueException")
+    })
     public boolean updateCoffee(
         @WebParam(name = "id", targetNamespace = "")
         int id,
         @WebParam(name = "model", targetNamespace = "")
-        Coffee model);
+        CreateOrUpdateCoffeeRequest model)
+        throws CoffeeNotFoundException, CoffeeNotUniqueException, CoffeeSortIllegalException
+    ;
+
+    /**
+     * 
+     * @param id
+     * @return
+     *     returns boolean
+     * @throws CoffeeNotFoundException
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "deleteCoffee", targetNamespace = "http://company.com/", className = "com.company.DeleteCoffee")
+    @ResponseWrapper(localName = "deleteCoffeeResponse", targetNamespace = "http://company.com/", className = "com.company.DeleteCoffeeResponse")
+    @Action(input = "http://company.com/CoffeeWebService/deleteCoffeeRequest", output = "http://company.com/CoffeeWebService/deleteCoffeeResponse", fault = {
+        @FaultAction(className = CoffeeNotFoundException.class, value = "http://company.com/CoffeeWebService/deleteCoffee/Fault/CoffeeNotFoundException")
+    })
+    public boolean deleteCoffee(
+        @WebParam(name = "id", targetNamespace = "")
+        int id)
+        throws CoffeeNotFoundException
+    ;
 
 }
