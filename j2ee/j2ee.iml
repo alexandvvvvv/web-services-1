@@ -8,5 +8,9 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="common" />
+    <orderEntry type="library" name="com.sun.jersey:jersey-server:1.17.1" level="project" />
+    <orderEntry type="library" name="com.sun.jersey:jersey-servlet:1.17.1" level="project" />
+    <orderEntry type="library" name="com.sun.jersey:jersey-json:1.17.1" level="project" />
+    <orderEntry type="library" name="com.sun.jersey:jersey-grizzly2:1.17.1" level="project" />
   </component>
 </module>

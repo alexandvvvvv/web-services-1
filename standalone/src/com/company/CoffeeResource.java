@@ -9,50 +9,58 @@ import com.company.faults.CoffeeNotFoundFault;
 import com.company.faults.CoffeeNotUniqueFault;
 import com.company.faults.CoffeeSortIllegalFault;
 
-import javax.jws.WebMethod;
-import javax.jws.WebParam;
-import javax.jws.WebService;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@WebService(serviceName = "CoffeeService")
-public class CoffeeWebService {
-
-    @WebMethod(operationName = "getCoffees")
-    public List<Coffee> getCoffees() {
-        PostgreSQLDAO dao = new PostgreSQLDAO();
-        return dao.getCoffees();
-    }
-    @WebMethod(operationName = "getFilteredCoffees")
-    public List<Coffee> getFilteredCoffees(@WebParam(name="filter")CoffeeFilter filter)
+@Path("/coffees")
+public class CoffeeResource {
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public ArrayList<Coffee> getFilteredCoffees(@QueryParam("cost") Integer cost,
+                                           @QueryParam("strength") Integer strength,
+                                           @QueryParam("name") String name,
+                                           @QueryParam("country") String country,
+                                           @QueryParam("sort") String sort)
             throws CoffeeSortIllegalException {
-        checkSort(filter.getSort());
+        checkSort(sort);
         PostgreSQLDAO dao = new PostgreSQLDAO();
+        CoffeeFilter filter = new CoffeeFilter(name, country, cost, sort, strength);
         return dao.getFilteredCoffees(filter);
     }
-    @WebMethod(operationName = "createCoffee")
-    public long createCoffee(@WebParam(name="model") CreateOrUpdateCoffeeRequest model)
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
+    public String createCoffee(CreateOrUpdateCoffeeRequest model)
             throws CoffeeSortIllegalException, CoffeeMissingPropertyException, CoffeeNotUniqueException {
         checkMissingProperties(model);
         checkSort(model.getSort());
         PostgreSQLDAO dao = new PostgreSQLDAO();
         checkUniqueness(dao, model, null);
-        return dao.create(fromModel(model));
+        return String.valueOf(dao.create(fromModel(model)));
     }
-    @WebMethod(operationName = "updateCoffee")
-    public boolean updateCoffee(@WebParam(name="id")int id, @WebParam(name="model") CreateOrUpdateCoffeeRequest model)
+
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
+    public String updateCoffee(@QueryParam("id")int id, CreateOrUpdateCoffeeRequest model)
             throws CoffeeNotFoundException, CoffeeSortIllegalException, CoffeeNotUniqueException  {
         checkSort(model.getSort());
         PostgreSQLDAO dao = new PostgreSQLDAO();
         checkCoffeeExists(id, dao);
         checkUniqueness(dao, model, id);
-        return dao.update(id, model);
+        return String.valueOf(dao.update(id, model));
     }
-    @WebMethod(operationName = "deleteCoffee")
-    public boolean deleteCoffee(@WebParam(name="id")int id) throws CoffeeNotFoundException {
+
+    @DELETE
+    @Produces(MediaType.TEXT_PLAIN)
+    public String deleteCoffee(@QueryParam("id") int id) throws CoffeeNotFoundException {
         PostgreSQLDAO dao = new PostgreSQLDAO();
         checkCoffeeExists(id, dao);
-        return dao.delete(id);
+        return String.valueOf(dao.delete(id));
     }
 
     private void checkCoffeeExists(int id, PostgreSQLDAO dao) throws CoffeeNotFoundException {

@@ -5,13 +5,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 public class PostgreSQLDAO {
 
-    public List<Coffee> getCoffees() {
-        List<Coffee> result = new ArrayList<>();
+    public ArrayList<Coffee> getCoffees() {
+        ArrayList<Coffee> result = new ArrayList<>();
         try (Connection connection = ConnectionUtil.getConnection()){
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery("select * from coffee");
@@ -35,8 +34,8 @@ public class PostgreSQLDAO {
     }
 
 
-    public List<Coffee> getFilteredCoffees(CoffeeFilter filter) {
-        List<Coffee> result = new ArrayList<>();
+    public ArrayList<Coffee> getFilteredCoffees(CoffeeFilter filter) {
+        ArrayList<Coffee> result = new ArrayList<>();
         try (Connection connection = ConnectionUtil.getConnection()){
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery("select * from coffee");

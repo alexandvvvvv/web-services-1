@@ -1,5 +1,8 @@
 package com.company;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class Coffee {
 
     private Integer id;
@@ -10,6 +13,7 @@ public class Coffee {
     private Integer strength;
 
     public Coffee(){}
+
     public Coffee(int id, String name, String country, int cost, CoffeeSort sort, int strength) {
         this.id = id;
         this.cost = cost;
@@ -66,5 +70,10 @@ public class Coffee {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "Coffee";
     }
 }

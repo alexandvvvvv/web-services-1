@@ -9,7 +9,7 @@ public class CoffeeFilter {
     private Integer strength;
 
     public CoffeeFilter() {}
-    public CoffeeFilter(String name, String country, int cost, String sort, int strength) {
+    public CoffeeFilter(String name, String country, Integer cost, String sort, Integer strength) {
         this.cost = cost;
         this.country = country;
         this.name = name;
