@@ -93,7 +93,8 @@ public class CoffeeWebService {
             throw new CoffeeMissingPropertyException("all properties must be specified", fault);
         }
     }
+
     private Coffee fromModel(CreateOrUpdateCoffeeRequest model) {
-        return new Coffee(0, model.getName(), model.getCountry(), model.getCost(), CoffeeSort.valueOf(model.getSort()), model.getStrength());
+        return new Coffee(0, model.getName(), model.getCountry(), model.getCost(), CoffeeSort.valueOf(model.getSort()), model.getStrength(), model.getImage());
     }
 }

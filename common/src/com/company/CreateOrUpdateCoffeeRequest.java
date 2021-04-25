@@ -7,14 +7,16 @@ public class CreateOrUpdateCoffeeRequest {
     private String name;
     private String sort;
     private Integer strength;
+    private String image;
 
     public CreateOrUpdateCoffeeRequest(){}
-    public CreateOrUpdateCoffeeRequest(String name, String country, int cost, String sort, int strength) {
+    public CreateOrUpdateCoffeeRequest(String name, String country, int cost, String sort, int strength, String image) {
         this.cost = cost;
         this.country = country;
         this.name = name;
         this.sort = sort;
         this.strength = strength;
+        this.image = image;
     }
 
 
@@ -58,4 +60,11 @@ public class CreateOrUpdateCoffeeRequest {
         this.strength = strength;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 }

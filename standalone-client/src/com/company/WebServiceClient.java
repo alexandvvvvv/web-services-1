@@ -1,7 +1,11 @@
 package com.company;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Base64;
 import java.util.List;
 import java.util.Scanner;
 
@@ -46,13 +50,13 @@ public class WebServiceClient {
         }
     }
 
-    private static void create(CoffeeService service, Scanner scanner) throws CoffeeMissingPropertyException, CoffeeNotUniqueException, CoffeeSortIllegalException{
+    private static void create(CoffeeService service, Scanner scanner) throws CoffeeMissingPropertyException, CoffeeNotUniqueException, CoffeeSortIllegalException, IOException {
         CreateOrUpdateCoffeeRequest model = getCoffee(scanner);
         long id = service.getCoffeeWebServicePort().createCoffee(model);
         System.out.println("Created coffee with ID: " + id);
     }
 
-    private static void update(CoffeeService service, Scanner scanner) throws CoffeeNotFoundException, CoffeeNotUniqueException, CoffeeSortIllegalException {
+    private static void update(CoffeeService service, Scanner scanner) throws CoffeeNotFoundException, CoffeeNotUniqueException, CoffeeSortIllegalException, IOException {
         int id = getId(scanner);
         CreateOrUpdateCoffeeRequest model = getCoffee(scanner);
         boolean result = service.getCoffeeWebServicePort().updateCoffee(id, model);
@@ -105,7 +109,8 @@ public class WebServiceClient {
                     ", country: " + coffee.getCountry()+
                     ", sort: " + coffee.getSort()+
                     ", cost: " + coffee.getCost()+
-                    ", strength: " + coffee.getStrength());
+                    ", strength: " + coffee.getStrength()+
+                    ", image: " + coffee.getImage());
         }
 
         System.out.println("Total coffees: " + coffees.size());
@@ -122,7 +127,7 @@ public class WebServiceClient {
         }
     }
 
-    private static CreateOrUpdateCoffeeRequest getCoffee(Scanner scanner) {
+    private static CreateOrUpdateCoffeeRequest getCoffee(Scanner scanner) throws IOException {
         CreateOrUpdateCoffeeRequest model = new CreateOrUpdateCoffeeRequest();
         String temp;
 
@@ -154,6 +159,13 @@ public class WebServiceClient {
         temp = scanner.nextLine();
         if (!temp.isEmpty()) {
             model.setCost(Integer.parseInt(temp));
+        }
+
+        System.out.println("Enter path to image:");
+        temp = scanner.nextLine();
+        if (!temp.isEmpty()) {
+            byte[] bytes = Files.readAllBytes(Paths.get(temp));
+            model.image = Base64.getEncoder().encodeToString(bytes);
         }
         return model;
     }

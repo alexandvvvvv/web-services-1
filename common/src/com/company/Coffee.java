@@ -8,15 +8,17 @@ public class Coffee {
     private String name;
     private CoffeeSort sort;
     private Integer strength;
+    private String image;
 
     public Coffee(){}
-    public Coffee(int id, String name, String country, int cost, CoffeeSort sort, int strength) {
+    public Coffee(int id, String name, String country, int cost, CoffeeSort sort, int strength, String image) {
         this.id = id;
         this.cost = cost;
         this.country = country;
         this.name = name;
         this.sort = sort;
         this.strength = strength;
+        this.image = image;
     }
 
 
@@ -66,5 +68,13 @@ public class Coffee {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

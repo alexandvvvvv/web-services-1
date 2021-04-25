@@ -20,6 +20,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="cost" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *         &lt;element name="country" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
+ *         &lt;element name="image" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="sort" type="{http://company.com/}coffeeSort" minOccurs="0"/>
  *         &lt;element name="strength" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
@@ -36,6 +37,7 @@ import javax.xml.bind.annotation.XmlType;
     "cost",
     "country",
     "id",
+    "image",
     "name",
     "sort",
     "strength"
@@ -45,6 +47,7 @@ public class Coffee {
     protected Integer cost;
     protected String country;
     protected Integer id;
+    protected String image;
     protected String name;
     @XmlSchemaType(name = "string")
     protected CoffeeSort sort;
@@ -120,6 +123,30 @@ public class Coffee {
      */
     public void setId(Integer value) {
         this.id = value;
+    }
+
+    /**
+     * Gets the value of the image property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getImage() {
+        return image;
+    }
+
+    /**
+     * Sets the value of the image property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setImage(String value) {
+        this.image = value;
     }
 
     /**

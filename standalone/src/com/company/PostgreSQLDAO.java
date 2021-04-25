@@ -23,8 +23,9 @@ public class PostgreSQLDAO {
                 int cost = rs.getInt("cost");
                 int sort = rs.getInt("sort");
                 int strength = rs.getInt("strength");
+                String image = rs.getString("image");
 
-                Coffee coffee = new Coffee(id, name, country, cost, CoffeeSort.values()[sort], strength);
+                Coffee coffee = new Coffee(id, name, country, cost, CoffeeSort.values()[sort], strength, image);
                 result.add(coffee);
             }
         } catch (SQLException ex) {
@@ -48,6 +49,7 @@ public class PostgreSQLDAO {
                 int cost = rs.getInt("cost");
                 CoffeeSort sort = CoffeeSort.values()[rs.getInt("sort")];
                 int strength = rs.getInt("strength");
+                String image = rs.getString("image");
 
                 if (!isNullOrBlank(filter.getName())) {
                     if (!name.equalsIgnoreCase(filter.getName())) continue;
@@ -69,7 +71,7 @@ public class PostgreSQLDAO {
                     if (strength != filter.getStrength()) continue;
                 }
 
-                Coffee coffee = new Coffee(id, name, country, cost, sort, strength);
+                Coffee coffee = new Coffee(id, name, country, cost, sort, strength, image);
                 result.add(coffee);
             }
         } catch (SQLException ex) {
@@ -83,9 +85,9 @@ public class PostgreSQLDAO {
         try (Connection connection = ConnectionUtil.getConnection()) {
             Statement stmt = connection.createStatement();
 
-            ResultSet result = stmt.executeQuery("INSERT INTO COFFEE (NAME, COUNTRY, COST, SORT, STRENGTH) VALUES " +
+            ResultSet result = stmt.executeQuery("INSERT INTO COFFEE (NAME, COUNTRY, COST, SORT, STRENGTH, IMAGE) VALUES " +
                     "('" + model.getName() + "', '" + model.getCountry() + "', '" + model.getCost() +
-                    "', '" + model.getSort().ordinal() + "', '" + model.getStrength() + "') RETURNING id");
+                    "', '" + model.getSort().ordinal() + "', '" + model.getStrength() + "', '" + model.getImage() + "') RETURNING id");
 
             if (result.next()) {
                 return (result.getInt("id"));

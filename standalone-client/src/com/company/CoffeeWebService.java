@@ -28,18 +28,6 @@ public interface CoffeeWebService {
 
     /**
      * 
-     * @return
-     *     returns java.util.List<com.company.Coffee>
-     */
-    @WebMethod
-    @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getCoffees", targetNamespace = "http://company.com/", className = "com.company.GetCoffees")
-    @ResponseWrapper(localName = "getCoffeesResponse", targetNamespace = "http://company.com/", className = "com.company.GetCoffeesResponse")
-    @Action(input = "http://company.com/CoffeeWebService/getCoffeesRequest", output = "http://company.com/CoffeeWebService/getCoffeesResponse")
-    public List<Coffee> getCoffees();
-
-    /**
-     * 
      * @param filter
      * @return
      *     returns java.util.List<com.company.Coffee>
@@ -60,27 +48,15 @@ public interface CoffeeWebService {
 
     /**
      * 
-     * @param model
      * @return
-     *     returns long
-     * @throws CoffeeMissingPropertyException
-     * @throws CoffeeNotUniqueException
-     * @throws CoffeeSortIllegalException
+     *     returns java.util.List<com.company.Coffee>
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "createCoffee", targetNamespace = "http://company.com/", className = "com.company.CreateCoffee")
-    @ResponseWrapper(localName = "createCoffeeResponse", targetNamespace = "http://company.com/", className = "com.company.CreateCoffeeResponse")
-    @Action(input = "http://company.com/CoffeeWebService/createCoffeeRequest", output = "http://company.com/CoffeeWebService/createCoffeeResponse", fault = {
-        @FaultAction(className = CoffeeSortIllegalException.class, value = "http://company.com/CoffeeWebService/createCoffee/Fault/CoffeeSortIllegalException"),
-        @FaultAction(className = CoffeeMissingPropertyException.class, value = "http://company.com/CoffeeWebService/createCoffee/Fault/CoffeeMissingPropertyException"),
-        @FaultAction(className = CoffeeNotUniqueException.class, value = "http://company.com/CoffeeWebService/createCoffee/Fault/CoffeeNotUniqueException")
-    })
-    public long createCoffee(
-        @WebParam(name = "model", targetNamespace = "")
-        CreateOrUpdateCoffeeRequest model)
-        throws CoffeeMissingPropertyException, CoffeeNotUniqueException, CoffeeSortIllegalException
-    ;
+    @RequestWrapper(localName = "getCoffees", targetNamespace = "http://company.com/", className = "com.company.GetCoffees")
+    @ResponseWrapper(localName = "getCoffeesResponse", targetNamespace = "http://company.com/", className = "com.company.GetCoffeesResponse")
+    @Action(input = "http://company.com/CoffeeWebService/getCoffeesRequest", output = "http://company.com/CoffeeWebService/getCoffeesResponse")
+    public List<Coffee> getCoffees();
 
     /**
      * 
@@ -107,6 +83,30 @@ public interface CoffeeWebService {
         @WebParam(name = "model", targetNamespace = "")
         CreateOrUpdateCoffeeRequest model)
         throws CoffeeNotFoundException, CoffeeNotUniqueException, CoffeeSortIllegalException
+    ;
+
+    /**
+     * 
+     * @param model
+     * @return
+     *     returns long
+     * @throws CoffeeMissingPropertyException
+     * @throws CoffeeSortIllegalException
+     * @throws CoffeeNotUniqueException
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "createCoffee", targetNamespace = "http://company.com/", className = "com.company.CreateCoffee")
+    @ResponseWrapper(localName = "createCoffeeResponse", targetNamespace = "http://company.com/", className = "com.company.CreateCoffeeResponse")
+    @Action(input = "http://company.com/CoffeeWebService/createCoffeeRequest", output = "http://company.com/CoffeeWebService/createCoffeeResponse", fault = {
+        @FaultAction(className = CoffeeSortIllegalException.class, value = "http://company.com/CoffeeWebService/createCoffee/Fault/CoffeeSortIllegalException"),
+        @FaultAction(className = CoffeeMissingPropertyException.class, value = "http://company.com/CoffeeWebService/createCoffee/Fault/CoffeeMissingPropertyException"),
+        @FaultAction(className = CoffeeNotUniqueException.class, value = "http://company.com/CoffeeWebService/createCoffee/Fault/CoffeeNotUniqueException")
+    })
+    public long createCoffee(
+        @WebParam(name = "model", targetNamespace = "")
+        CreateOrUpdateCoffeeRequest model)
+        throws CoffeeMissingPropertyException, CoffeeNotUniqueException, CoffeeSortIllegalException
     ;
 
     /**

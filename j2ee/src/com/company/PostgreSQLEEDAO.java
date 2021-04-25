@@ -29,8 +29,9 @@ public class PostgreSQLEEDAO {
                 int cost = rs.getInt("cost");
                 int sort = rs.getInt("sort");
                 int strength = rs.getInt("strength");
+                String image = rs.getString("image");
 
-                Coffee coffee = new Coffee(id, name, country, cost, CoffeeSort.values()[sort], strength);
+                Coffee coffee = new Coffee(id, name, country, cost, CoffeeSort.values()[sort], strength, image);
                 result.add(coffee);
             }
         } catch (SQLException ex) {
@@ -54,6 +55,7 @@ public class PostgreSQLEEDAO {
                 int cost = rs.getInt("cost");
                 CoffeeSort sort = CoffeeSort.values()[rs.getInt("sort")];
                 int strength = rs.getInt("strength");
+                String image = rs.getString("image");
 
                 if (!isNullOrBlank(filter.getName())) {
                     if (!name.equalsIgnoreCase(filter.getName())) continue;
@@ -75,7 +77,7 @@ public class PostgreSQLEEDAO {
                     if (strength != filter.getStrength()) continue;
                 }
 
-                Coffee coffee = new Coffee(id, name, country, cost, sort, strength);
+                Coffee coffee = new Coffee(id, name, country, cost, sort, strength, image);
                 result.add(coffee);
             }
         } catch (SQLException ex) {
