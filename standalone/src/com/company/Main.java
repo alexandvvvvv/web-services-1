@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class Main {
 
-    private static final URI BASE_URI = URI.create("http://localhost:8080/rest/");
+    private static final URI BASE_URI = URI.create("http://localhost:8081/rest/");
     public static void main(String[] args) {
         HttpServer server = null;
         try {

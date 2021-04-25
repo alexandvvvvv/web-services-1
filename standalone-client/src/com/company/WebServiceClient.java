@@ -1,15 +1,23 @@
 package com.company;
 
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.GenericType;
+import com.sun.jersey.api.client.WebResource;
+import com.sun.jersey.api.client.config.ClientConfig;
+import com.sun.jersey.api.client.config.DefaultClientConfig;
+import com.sun.jersey.api.json.JSONConfiguration;
+import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
+
+import javax.ws.rs.core.MediaType;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 import java.util.Scanner;
 
 public class WebServiceClient {
 
-    public static void main(String[] args) throws MalformedURLException {
-        URL url = new URL("http://localhost:8082/CoffeeService?wsdl");
-        CoffeeService personService = new CoffeeService(url);
+    private static String URL = "http://localhost:8081/rest/coffees";
+    public static void main(String[] args)  {
 
         System.out.println("Enter values to get filtered coffees. To omit filtering on any value just press Enter. To finish program enter q when entering name is suggested");
         Scanner scanner = new Scanner(System.in);
@@ -24,16 +32,16 @@ public class WebServiceClient {
                     case 0:
                         return;
                     case 1:
-                        listFiltered(personService, scanner);
+                        listFiltered(scanner);
                         break;
                     case 2:
-                        create(personService, scanner);
+                        create(scanner);
                         break;
                     case 3:
-                        update(personService, scanner);
+                        update(scanner);
                         break;
                     case 4:
-                        delete(personService, scanner);
+                        delete(scanner);
                         break;
                     default:
                         System.out.println("ALlowed input is from 1 to 4");
@@ -46,60 +54,105 @@ public class WebServiceClient {
         }
     }
 
-    private static void create(CoffeeService service, Scanner scanner) throws CoffeeMissingPropertyException, CoffeeNotUniqueException, CoffeeSortIllegalException{
+    private static void create(Scanner scanner) {
+        Client client = createClient();
         CreateOrUpdateCoffeeRequest model = getCoffee(scanner);
-        long id = service.getCoffeeWebServicePort().createCoffee(model);
+
+        WebResource webResource = client.resource(URL);
+
+        ClientResponse response =
+                webResource.type(MediaType.APPLICATION_JSON).accept(MediaType.TEXT_PLAIN).post(ClientResponse.class, model);
+        if (response.getStatus() != ClientResponse.Status.OK.getStatusCode()) {
+            throw new IllegalStateException("Request failed");
+        }
+
+        GenericType<String> type = new GenericType<String>() {};
+        String id = response.getEntity(type);
         System.out.println("Created coffee with ID: " + id);
     }
 
-    private static void update(CoffeeService service, Scanner scanner) throws CoffeeNotFoundException, CoffeeNotUniqueException, CoffeeSortIllegalException {
+    private static void update(Scanner scanner) {
+        Client client = createClient();
         int id = getId(scanner);
         CreateOrUpdateCoffeeRequest model = getCoffee(scanner);
-        boolean result = service.getCoffeeWebServicePort().updateCoffee(id, model);
-        System.out.println(result ? "Updated " : "Failed to update " + "coffee with ID:  " + id);
+
+        WebResource webResource = client.resource(URL);
+        webResource = webResource.queryParam("id", String.valueOf(id));
+
+        ClientResponse response =
+                webResource.type(MediaType.APPLICATION_JSON).accept(MediaType.TEXT_PLAIN).put(ClientResponse.class, model);
+        if (response.getStatus() != ClientResponse.Status.OK.getStatusCode()) {
+            throw new IllegalStateException("Request failed");
+        }
+        GenericType<String> type = new GenericType<String>() {};
+        String result = response.getEntity(type);
+
+        System.out.println(result.equalsIgnoreCase("true") ? "Updated " : "Failed to update " + "coffee with ID:  " + id);
     }
 
-    private static void delete(CoffeeService service, Scanner scanner) throws CoffeeNotFoundException {
+    private static void delete(Scanner scanner) {
+        Client client = createClient();
         int id = getId(scanner);
-        boolean result = service.getCoffeeWebServicePort().deleteCoffee(id);
-        System.out.println(result ? "Deleted " : "Failed to delete " + "coffee with ID:  " + id);
+
+        WebResource webResource = client.resource(URL);
+        webResource = webResource.queryParam("id", String.valueOf(id));
+
+        ClientResponse response =
+                webResource.accept(MediaType.TEXT_PLAIN).delete(ClientResponse.class);
+        if (response.getStatus() != ClientResponse.Status.OK.getStatusCode()) {
+            throw new IllegalStateException("Request failed");
+        }
+        GenericType<String> type = new GenericType<String>() {};
+        String result = response.getEntity(type);
+
+        System.out.println(result.equalsIgnoreCase("true") ? "Deleted " : "Failed to delete " + "coffee with ID:  " + id);
     }
 
-    private static void listFiltered(CoffeeService service, Scanner scanner) throws CoffeeSortIllegalException {
-        CoffeeFilter filter = new CoffeeFilter();
+    private static void listFiltered(Scanner scanner) {
+        Client client = createClient();
         String temp;
+
+        WebResource webResource = client.resource(URL);
 
         System.out.println("Enter name:");
         temp = scanner.nextLine();
         if (!temp.isEmpty()) {
-            filter.setName(temp);
+            webResource = webResource.queryParam("name", temp);
         }
 
         System.out.println("Enter country:");
         temp = scanner.nextLine();
         if (!temp.isEmpty()) {
-            filter.setCountry(temp);
+            webResource = webResource.queryParam("country", temp);
         }
 
         System.out.println("Enter sort (ARABIC or ROBUST):");
         temp = scanner.nextLine();
         if (!temp.isEmpty()) {
-            filter.setSort(temp);
+            webResource = webResource.queryParam("sort", temp);
         }
 
         System.out.println("Enter strength (1..10):");
         temp = scanner.nextLine();
         if (!temp.isEmpty()) {
-            filter.setStrength(Integer.parseInt(temp));
+            webResource = webResource.queryParam("strength", temp);
         }
 
         System.out.println("Enter cost:");
         temp = scanner.nextLine();
         if (!temp.isEmpty()) {
-            filter.setCost(Integer.parseInt(temp));
+            webResource = webResource.queryParam("cost", temp);
         }
 
-        List<Coffee> coffees = service.getCoffeeWebServicePort().getFilteredCoffees(filter);
+        ClientResponse response =
+                webResource.accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+        if (response.getStatus() != ClientResponse.Status.OK.getStatusCode()) {
+            throw new IllegalStateException("Request failed");
+        }
+
+        GenericType<List<Coffee>> type = new GenericType<List<Coffee>>() {};
+        List<Coffee> coffees = response.getEntity(type);
+
         for (Coffee coffee : coffees) {
             System.out.println("name: " + coffee.getName() +
                     ", country: " + coffee.getCountry()+
@@ -120,6 +173,13 @@ public class WebServiceClient {
             }
             System.out.println("ID must be an integer");
         }
+    }
+
+    private static Client createClient() {
+        ClientConfig clientConfig = new DefaultClientConfig();
+        clientConfig.getClasses().add(JacksonJsonProvider.class);
+        clientConfig.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);  // <----- set the json configuration POJO MAPPING for JSON response paring
+        return Client.create(clientConfig);
     }
 
     private static CreateOrUpdateCoffeeRequest getCoffee(Scanner scanner) {
