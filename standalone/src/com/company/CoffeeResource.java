@@ -4,10 +4,6 @@ import com.company.exceptions.CoffeeMissingPropertyException;
 import com.company.exceptions.CoffeeNotFoundException;
 import com.company.exceptions.CoffeeNotUniqueException;
 import com.company.exceptions.CoffeeSortIllegalException;
-import com.company.faults.CoffeeMissingPropertyFault;
-import com.company.faults.CoffeeNotFoundFault;
-import com.company.faults.CoffeeNotUniqueFault;
-import com.company.faults.CoffeeSortIllegalFault;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -66,8 +62,7 @@ public class CoffeeResource {
     private void checkCoffeeExists(int id, PostgreSQLDAO dao) throws CoffeeNotFoundException {
         List<Coffee> allCoffees = dao.getCoffees();
         if (!allCoffees.stream().anyMatch(x -> x.getId() == id)) {
-            CoffeeNotFoundFault fault = CoffeeNotFoundFault.defaultInstance();
-            throw new CoffeeNotFoundException("coffee not found", fault);
+            throw new CoffeeNotFoundException("coffee not found");
         }
     }
 
@@ -79,8 +74,7 @@ public class CoffeeResource {
             && x.getName().equalsIgnoreCase(model.getName())
             && x.getCountry().equalsIgnoreCase(model.getCountry())
             && x.getStrength() == model.getStrength())) {
-            CoffeeNotUniqueFault fault = CoffeeNotUniqueFault.defaultInstance();
-            throw new CoffeeNotUniqueException("coffee with specified values already exists", fault);
+            throw new CoffeeNotUniqueException("coffee with specified values already exists");
         }
     }
 
@@ -88,8 +82,7 @@ public class CoffeeResource {
     private void checkSort(String sort) throws CoffeeSortIllegalException {
         if (sort != null) {
             if (!Arrays.stream(CoffeeSort.values()).anyMatch(x -> x.name().equalsIgnoreCase(sort))) {
-                CoffeeSortIllegalFault fault = CoffeeSortIllegalFault.defaultInstance();
-                throw new CoffeeSortIllegalException("invalid sort value", fault);
+                throw new CoffeeSortIllegalException("invalid sort value");
             }
         }
     }
@@ -97,8 +90,7 @@ public class CoffeeResource {
     private void checkMissingProperties(CreateOrUpdateCoffeeRequest model) throws CoffeeMissingPropertyException {
         if (model.getName() == null || model.getCountry() == null ||
                 model.getSort() == null || model.getStrength() == null || model.getCost() == null) {
-            CoffeeMissingPropertyFault fault = CoffeeMissingPropertyFault.defaultInstance();
-            throw new CoffeeMissingPropertyException("all properties must be specified", fault);
+            throw new CoffeeMissingPropertyException("all properties must be specified");
         }
     }
     private Coffee fromModel(CreateOrUpdateCoffeeRequest model) {

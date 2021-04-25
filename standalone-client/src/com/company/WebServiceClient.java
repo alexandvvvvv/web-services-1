@@ -10,7 +10,6 @@ import com.sun.jersey.api.json.JSONConfiguration;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 
 import javax.ws.rs.core.MediaType;
-import java.net.MalformedURLException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -60,11 +59,8 @@ public class WebServiceClient {
 
         WebResource webResource = client.resource(URL);
 
-        ClientResponse response =
-                webResource.type(MediaType.APPLICATION_JSON).accept(MediaType.TEXT_PLAIN).post(ClientResponse.class, model);
-        if (response.getStatus() != ClientResponse.Status.OK.getStatusCode()) {
-            throw new IllegalStateException("Request failed");
-        }
+        ClientResponse response = webResource.type(MediaType.APPLICATION_JSON).accept(MediaType.TEXT_PLAIN).post(ClientResponse.class, model);
+        checkResponseStatus(response);
 
         GenericType<String> type = new GenericType<String>() {};
         String id = response.getEntity(type);
@@ -79,11 +75,9 @@ public class WebServiceClient {
         WebResource webResource = client.resource(URL);
         webResource = webResource.queryParam("id", String.valueOf(id));
 
-        ClientResponse response =
-                webResource.type(MediaType.APPLICATION_JSON).accept(MediaType.TEXT_PLAIN).put(ClientResponse.class, model);
-        if (response.getStatus() != ClientResponse.Status.OK.getStatusCode()) {
-            throw new IllegalStateException("Request failed");
-        }
+        ClientResponse response = webResource.type(MediaType.APPLICATION_JSON).accept(MediaType.TEXT_PLAIN).put(ClientResponse.class, model);
+        checkResponseStatus(response);
+
         GenericType<String> type = new GenericType<String>() {};
         String result = response.getEntity(type);
 
@@ -97,11 +91,9 @@ public class WebServiceClient {
         WebResource webResource = client.resource(URL);
         webResource = webResource.queryParam("id", String.valueOf(id));
 
-        ClientResponse response =
-                webResource.accept(MediaType.TEXT_PLAIN).delete(ClientResponse.class);
-        if (response.getStatus() != ClientResponse.Status.OK.getStatusCode()) {
-            throw new IllegalStateException("Request failed");
-        }
+        ClientResponse response = webResource.accept(MediaType.TEXT_PLAIN).delete(ClientResponse.class);
+        checkResponseStatus(response);
+
         GenericType<String> type = new GenericType<String>() {};
         String result = response.getEntity(type);
 
@@ -144,17 +136,15 @@ public class WebServiceClient {
             webResource = webResource.queryParam("cost", temp);
         }
 
-        ClientResponse response =
-                webResource.accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
-        if (response.getStatus() != ClientResponse.Status.OK.getStatusCode()) {
-            throw new IllegalStateException("Request failed");
-        }
+        ClientResponse response = webResource.accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+        checkResponseStatus(response);
 
         GenericType<List<Coffee>> type = new GenericType<List<Coffee>>() {};
         List<Coffee> coffees = response.getEntity(type);
 
         for (Coffee coffee : coffees) {
-            System.out.println("name: " + coffee.getName() +
+            System.out.println("ID: " + coffee.getId() +
+                    ", name: " + coffee.getName() +
                     ", country: " + coffee.getCountry()+
                     ", sort: " + coffee.getSort()+
                     ", cost: " + coffee.getCost()+
@@ -162,6 +152,14 @@ public class WebServiceClient {
         }
 
         System.out.println("Total coffees: " + coffees.size());
+    }
+
+    private static void checkResponseStatus(ClientResponse response) {
+        if (response.getStatus() != ClientResponse.Status.OK.getStatusCode()) {
+            GenericType<String> type = new GenericType<String>() {};
+            String reason = response.getEntity(type);
+            throw new IllegalStateException("Request failed: " + reason);
+        }
     }
 
     private static int getId(Scanner scanner) {

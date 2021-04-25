@@ -1,5 +1,6 @@
 package com.company;
 
+import com.company.exceptions.mappers.*;
 import com.sun.jersey.api.container.grizzly2.GrizzlyServerFactory;
 import com.sun.jersey.api.core.ClassNamesResourceConfig;
 import com.sun.jersey.api.core.ResourceConfig;
@@ -16,7 +17,12 @@ public class Main {
     public static void main(String[] args) {
         HttpServer server = null;
         try {
-            ResourceConfig resourceConfig = new ClassNamesResourceConfig(CoffeeResource.class);
+            ResourceConfig resourceConfig = new ClassNamesResourceConfig(CoffeeResource.class,
+                    CoffeeMissingPropertyExceptionMapper.class,
+                    CoffeeSortIllegalExceptionMapper.class,
+                    CoffeeNotUniqueExceptionMapper.class,
+                    CoffeeNotFoundExceptionMapper.class);
+
             final Map<String, Object> config = new HashMap<String, Object>();
             config.put("com.sun.jersey.api.json.POJOMappingFeature", true);
             resourceConfig.setPropertiesAndFeatures(config);
