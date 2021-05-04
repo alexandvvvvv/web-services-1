@@ -1,15 +1,11 @@
 package com.company;
 
-import com.company.exceptions.CoffeeMissingPropertyException;
-import com.company.exceptions.CoffeeNotFoundException;
-import com.company.exceptions.CoffeeNotUniqueException;
-import com.company.exceptions.CoffeeSortIllegalException;
+import com.company.exceptions.*;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.io.IOException;
+import java.util.*;
 
 @Path("/coffees")
 public class CoffeeResource {
@@ -30,8 +26,9 @@ public class CoffeeResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
-    public String createCoffee(CreateOrUpdateCoffeeRequest model)
-            throws CoffeeSortIllegalException, CoffeeMissingPropertyException, CoffeeNotUniqueException {
+    public String createCoffee(@HeaderParam("authorization") String authString, CreateOrUpdateCoffeeRequest model)
+            throws CoffeeSortIllegalException, CoffeeMissingPropertyException, CoffeeNotUniqueException, UnauthorizedException {
+        checkAuth(authString);
         checkMissingProperties(model);
         checkSort(model.getSort());
         PostgreSQLDAO dao = new PostgreSQLDAO();
@@ -42,8 +39,9 @@ public class CoffeeResource {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
-    public String updateCoffee(@QueryParam("id")int id, CreateOrUpdateCoffeeRequest model)
-            throws CoffeeNotFoundException, CoffeeSortIllegalException, CoffeeNotUniqueException  {
+    public String updateCoffee(@HeaderParam("authorization") String authString, @QueryParam("id")int id, CreateOrUpdateCoffeeRequest model)
+            throws CoffeeNotFoundException, CoffeeSortIllegalException, CoffeeNotUniqueException, UnauthorizedException {
+        checkAuth(authString);
         checkSort(model.getSort());
         PostgreSQLDAO dao = new PostgreSQLDAO();
         checkCoffeeExists(id, dao);
@@ -53,10 +51,34 @@ public class CoffeeResource {
 
     @DELETE
     @Produces(MediaType.TEXT_PLAIN)
-    public String deleteCoffee(@QueryParam("id") int id) throws CoffeeNotFoundException {
+    public String deleteCoffee(@HeaderParam("authorization") String authString, @QueryParam("id") int id) throws CoffeeNotFoundException, UnauthorizedException {
+        checkAuth(authString);
         PostgreSQLDAO dao = new PostgreSQLDAO();
         checkCoffeeExists(id, dao);
         return String.valueOf(dao.delete(id));
+    }
+
+    private void checkAuth(String authString) throws UnauthorizedException {
+        if (authString == null)
+            throw UnauthorizedException.DEFAULT_INSTANCE;
+        final String encodedUserPassword = authString.replaceFirst("Basic"
+                + " ", "");
+        String usernameAndPassword = null;
+        try {
+            byte[] decodedBytes = Base64.getDecoder().decode(
+                    encodedUserPassword);
+            usernameAndPassword = new String(decodedBytes, "UTF-8");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        final StringTokenizer tokenizer = new StringTokenizer(
+                usernameAndPassword, ":");
+        final String username = tokenizer.nextToken();
+        final String password = tokenizer.nextToken();
+
+        if (!"Username".equals(username) || !"P@$$W0RD".equals(password)) {
+            throw UnauthorizedException.DEFAULT_INSTANCE;
+        }
     }
 
     private void checkCoffeeExists(int id, PostgreSQLDAO dao) throws CoffeeNotFoundException {

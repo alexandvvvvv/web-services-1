@@ -8,6 +8,7 @@ import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 import com.sun.jersey.api.json.JSONConfiguration;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
+import sun.misc.BASE64Encoder;
 
 import javax.ws.rs.core.MediaType;
 import java.util.List;
@@ -59,7 +60,12 @@ public class WebServiceClient {
 
         WebResource webResource = client.resource(URL);
 
-        ClientResponse response = webResource.type(MediaType.APPLICATION_JSON).accept(MediaType.TEXT_PLAIN).post(ClientResponse.class, model);
+        ClientResponse response = webResource
+                .type(MediaType.APPLICATION_JSON)
+                .accept(MediaType.TEXT_PLAIN)
+                .header("Authorization", "Basic " + getAuthStringEncrypted())
+                .post(ClientResponse.class, model);
+
         checkResponseStatus(response);
 
         GenericType<String> type = new GenericType<String>() {};
@@ -75,7 +81,11 @@ public class WebServiceClient {
         WebResource webResource = client.resource(URL);
         webResource = webResource.queryParam("id", String.valueOf(id));
 
-        ClientResponse response = webResource.type(MediaType.APPLICATION_JSON).accept(MediaType.TEXT_PLAIN).put(ClientResponse.class, model);
+        ClientResponse response = webResource
+                .type(MediaType.APPLICATION_JSON)
+                .accept(MediaType.TEXT_PLAIN)
+                .header("Authorization", "Basic " + getAuthStringEncrypted())
+                .put(ClientResponse.class, model);
         checkResponseStatus(response);
 
         GenericType<String> type = new GenericType<String>() {};
@@ -91,7 +101,11 @@ public class WebServiceClient {
         WebResource webResource = client.resource(URL);
         webResource = webResource.queryParam("id", String.valueOf(id));
 
-        ClientResponse response = webResource.accept(MediaType.TEXT_PLAIN).delete(ClientResponse.class);
+        ClientResponse response = webResource
+                .accept(MediaType.TEXT_PLAIN)
+                .header("Authorization", "Basic " + getAuthStringEncrypted())
+                .delete(ClientResponse.class);
+
         checkResponseStatus(response);
 
         GenericType<String> type = new GenericType<String>() {};
@@ -215,4 +229,12 @@ public class WebServiceClient {
         }
         return model;
     }
+
+    private static String getAuthStringEncrypted() {
+        String name = "Username";
+        String password = "P@$$W0RD";
+        String authString = name + ":" + password;
+        return new BASE64Encoder().encode(authString.getBytes());
+    }
+
 }
