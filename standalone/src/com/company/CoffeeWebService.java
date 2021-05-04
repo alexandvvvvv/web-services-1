@@ -1,22 +1,23 @@
 package com.company;
 
-import com.company.exceptions.CoffeeMissingPropertyException;
-import com.company.exceptions.CoffeeNotFoundException;
-import com.company.exceptions.CoffeeNotUniqueException;
-import com.company.exceptions.CoffeeSortIllegalException;
-import com.company.faults.CoffeeMissingPropertyFault;
-import com.company.faults.CoffeeNotFoundFault;
-import com.company.faults.CoffeeNotUniqueFault;
-import com.company.faults.CoffeeSortIllegalFault;
+import com.company.exceptions.*;
+import com.company.faults.*;
 
+import javax.annotation.Resource;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
+import javax.xml.ws.WebServiceContext;
+import javax.xml.ws.handler.MessageContext;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @WebService(serviceName = "CoffeeService")
 public class CoffeeWebService {
+
+    @Resource
+    WebServiceContext wsctx;
 
     @WebMethod(operationName = "getCoffees")
     public List<Coffee> getCoffees() {
@@ -32,7 +33,8 @@ public class CoffeeWebService {
     }
     @WebMethod(operationName = "createCoffee")
     public long createCoffee(@WebParam(name="model") CreateOrUpdateCoffeeRequest model)
-            throws CoffeeSortIllegalException, CoffeeMissingPropertyException, CoffeeNotUniqueException {
+            throws CoffeeSortIllegalException, CoffeeMissingPropertyException, CoffeeNotUniqueException, UnauthorizedException {
+        checkAuth();
         checkMissingProperties(model);
         checkSort(model.getSort());
         PostgreSQLDAO dao = new PostgreSQLDAO();
@@ -41,7 +43,8 @@ public class CoffeeWebService {
     }
     @WebMethod(operationName = "updateCoffee")
     public boolean updateCoffee(@WebParam(name="id")int id, @WebParam(name="model") CreateOrUpdateCoffeeRequest model)
-            throws CoffeeNotFoundException, CoffeeSortIllegalException, CoffeeNotUniqueException  {
+            throws CoffeeNotFoundException, CoffeeSortIllegalException, CoffeeNotUniqueException, UnauthorizedException {
+        checkAuth();
         checkSort(model.getSort());
         PostgreSQLDAO dao = new PostgreSQLDAO();
         checkCoffeeExists(id, dao);
@@ -49,7 +52,8 @@ public class CoffeeWebService {
         return dao.update(id, model);
     }
     @WebMethod(operationName = "deleteCoffee")
-    public boolean deleteCoffee(@WebParam(name="id")int id) throws CoffeeNotFoundException {
+    public boolean deleteCoffee(@WebParam(name="id")int id) throws CoffeeNotFoundException, UnauthorizedException {
+        checkAuth();
         PostgreSQLDAO dao = new PostgreSQLDAO();
         checkCoffeeExists(id, dao);
         return dao.delete(id);
@@ -91,6 +95,31 @@ public class CoffeeWebService {
                 model.getSort() == null || model.getStrength() == null || model.getCost() == null) {
             CoffeeMissingPropertyFault fault = CoffeeMissingPropertyFault.defaultInstance();
             throw new CoffeeMissingPropertyException("all properties must be specified", fault);
+        }
+    }
+
+    private void checkAuth() throws UnauthorizedException {
+        MessageContext mctx = wsctx.getMessageContext();
+
+        //get detail from request headers
+        Map http_headers = (Map) mctx.get(MessageContext.HTTP_REQUEST_HEADERS);
+        List userList = (List) http_headers.get("Username");
+        List passList = (List) http_headers.get("Password");
+
+        String username = "";
+        String password = "";
+
+        if(userList!=null){
+            username = userList.get(0).toString();
+        }
+
+        if(passList!=null){
+            password = passList.get(0).toString();
+        }
+
+        if (!username.equals("Username") || !password.equals("P@$$W0RD")){
+            UnauthorizedFault fault = UnauthorizedFault.defaultInstance();
+            throw new UnauthorizedException(fault.getMessage(), fault);
         }
     }
 

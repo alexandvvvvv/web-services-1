@@ -1,13 +1,13 @@
 package com.company;
 
+import javax.xml.ws.BindingProvider;
+import javax.xml.ws.handler.MessageContext;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Base64;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class WebServiceClient {
 
@@ -52,20 +52,26 @@ public class WebServiceClient {
 
     private static void create(CoffeeService service, Scanner scanner) throws CoffeeMissingPropertyException, CoffeeNotUniqueException, CoffeeSortIllegalException, IOException {
         CreateOrUpdateCoffeeRequest model = getCoffee(scanner);
-        long id = service.getCoffeeWebServicePort().createCoffee(model);
+        CoffeeWebService port = service.getCoffeeWebServicePort();
+        getCredentials(port);
+        long id = port.createCoffee(model);
         System.out.println("Created coffee with ID: " + id);
     }
 
     private static void update(CoffeeService service, Scanner scanner) throws CoffeeNotFoundException, CoffeeNotUniqueException, CoffeeSortIllegalException, IOException {
         int id = getId(scanner);
         CreateOrUpdateCoffeeRequest model = getCoffee(scanner);
-        boolean result = service.getCoffeeWebServicePort().updateCoffee(id, model);
+        CoffeeWebService port = service.getCoffeeWebServicePort();
+        getCredentials(port);
+        boolean result = port.updateCoffee(id, model);
         System.out.println(result ? "Updated " : "Failed to update " + "coffee with ID:  " + id);
     }
 
     private static void delete(CoffeeService service, Scanner scanner) throws CoffeeNotFoundException {
         int id = getId(scanner);
-        boolean result = service.getCoffeeWebServicePort().deleteCoffee(id);
+        CoffeeWebService port = service.getCoffeeWebServicePort();
+        getCredentials(port);
+        boolean result = port.deleteCoffee(id);
         System.out.println(result ? "Deleted " : "Failed to delete " + "coffee with ID:  " + id);
     }
 
@@ -169,4 +175,15 @@ public class WebServiceClient {
         }
         return model;
     }
+
+    private static void getCredentials(CoffeeWebService port) {
+        Map<String, Object> requestContext = ((BindingProvider)port).getRequestContext();
+        requestContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, "http://localhost:8082/CoffeeService?wsdl");
+        Map<String, List<String>> requestHeaders = new HashMap<String, List<String>>();
+        //values hard coded but can be got from input
+        requestHeaders.put("Username", Collections.singletonList("Username"));
+        requestHeaders.put("Password", Collections.singletonList("P@$$W0RD"));
+        requestContext.put(MessageContext.HTTP_REQUEST_HEADERS, requestHeaders);
+    }
+
 }
