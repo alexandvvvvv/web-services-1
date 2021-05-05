@@ -26,10 +26,10 @@ public class ThrottleInterceptor implements WriterInterceptor, ReaderInterceptor
         synchronized (lock) {
             currentCount = counter.get();
             if (currentCount >= MAX_PARALLEL_REQUESTS) throw ThrottleException.DEFAULT_INSTANCE;
+            counter.incrementAndGet();
         }
 
         try {
-            counter.incrementAndGet();
             return context.proceed();
         }
         finally {
